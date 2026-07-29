@@ -2,6 +2,8 @@
 const { directoryData } = Astro.props;
 import type { Listing } from '../schemas/listing';
 
+const listingCount = directoryData.length;
+
 // make a copy of directoryData and reformat it to be a GeoJSON object
 const geoJsonData = directoryData.map((item: Listing) => {
   return {
@@ -12,10 +14,13 @@ const geoJsonData = directoryData.map((item: Listing) => {
     },
     properties: {
       name: item.name,
+      type: item.type,
       description: item.description,
       address: item.address,
       website: item.website,
-      type: item.type
+      instagram: item.instagram,
+      phone: item.phone,
+      mapUrl: item.mapUrl,
     }
   }
 });
@@ -23,23 +28,32 @@ const geoJsonData = directoryData.map((item: Listing) => {
 
 <div id="directory-container" class="directory-container" data-directory-data={JSON.stringify(geoJsonData)}>
 
-  <div>
+  <div class="filters">
+    <div>{listingCount} listings</div>
     <div>
       <input type="text" placeholder="Search by Name, Location, or Type" />
     </div>
-  
-    <ul>
-      {directoryData.map((item: Listing) => (
-        <li>
-          <div class="type-step-2">{item.name}</div>
-        </li>
-      ))}
-    </ul>
   </div>
 
-  <div>
+  <div class="map-container">
     <div id="map"></div>
   </div>
+
+  <ul class="directory-list" role="list">
+    {directoryData.map((item: Listing) => (
+      <li class="directory-list-item">
+        <h3 class="type-step-2">{item.name}</h3>
+        {item.type && <div class="type-step--1">{item.type}</div>}
+        <div class="directory-list-item-content">
+          {item.description && <div>{item.description}</div>}
+          {item.address && <div><a href={item.mapUrl} target="_blank">{item.address}</a></div>}
+          {item.phone && <div>{item.phone}</div>}
+          {item.website && <div><a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a></div>}
+          {item.instagram && <div><a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a></div>}
+        </div>
+      </li>
+    ))}
+  </ul>
 
 </div>
 
@@ -105,10 +119,14 @@ const geoJsonData = directoryData.map((item: Listing) => {
       const coordinates = e.features[0].geometry.coordinates.slice();
       const popupContent = `
         <div class="type-step-0">${e.features[0].properties.name}</div>
-        <div class="type-step--1">${e.features[0].properties.description}</div>
-        <div class="type-step--1">${e.features[0].properties.address}</div>
-        <div class="type-step--1"><a href="${e.features[0].properties.website}" target="_blank">Website</a></div>
-        <div class="type-step--1">${e.features[0].properties.type}</div>
+        <div class="font-mono type-step--1">
+        <div>${e.features[0].properties.type}</div>
+        <div>${e.features[0].properties.description}</div>
+        <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}</a></div>
+        <div>${e.features[0].properties.phone}</div>
+        <div><a href="${e.features[0].properties.website}" target="_blank">Website</a></div>
+        <div><a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
+        </div>
       `;
 
       // Ensure that if the map is zoomed out such that multiple
@@ -138,16 +156,72 @@ const geoJsonData = directoryData.map((item: Listing) => {
 <style is:global>
   .directory-container {
     display: grid;
+    align-items: start;
     gap: var(--space-l);
+    margin-block: var(--space-l);
 
     @media screen and (min-width: 768px) {
       grid-template-columns: 1fr 1fr;
     }
   }
 
+  /* Filters */
+  .filters {
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    position: sticky;
+    gap: var(--space-s);
+    grid-column: 1 / -1;
+    padding-block: var(--space-s);
+    background-color: var(--color-bg-primary);
+  }
+
+  /* Directory List */
+  .directory-list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    .directory-list-item {
+      padding-block: var(--space-xs);
+      border-top: 1px solid var(--color-fg-primary);
+
+      &:last-child {
+        border-bottom: 1px solid var(--color-fg-primary);
+      }
+
+      h3 {
+        margin: 0;
+      }
+
+      .directory-list-item-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2xs);
+        margin-top: var(--space-2xs);
+      }
+    }
+  }
+
+  /* Map */
+  .map-container {
+    height: 500px;
+    position: relative;
+
+    @media screen and (min-width: 768px) {
+      order: 2;
+      position: sticky;
+      top: calc(var(--space-l) * 2);
+      height: calc(100vh - (var(--space-l) * 3));
+    }
+  }
+
   #map {
     width: 100%;
-    height: 500px;
+    height: 100%;
     overflow: hidden;
     border-radius: var(--space-3xs);
     

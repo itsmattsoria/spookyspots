@@ -6,6 +6,8 @@ const listingSchema = z.object({
   address: z.string(),
   latLong: z.string(),
   website: z.string(),
+  instagram: z.string(),
+  phone: z.string(),
   mapUrl: z.string(),
   type: z.string(),
   tags: z.array(z.string()),
