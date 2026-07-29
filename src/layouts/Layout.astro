@@ -1,3 +1,10 @@
+---
+import '../styles/fonts.css';
+import '../styles/main.css';
+
+const { pageTitle } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
@@ -6,18 +13,38 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>Spooky Spots - {pageTitle}</title>
 	</head>
 	<body>
+		<header class="site-header">
+			<h1 class="font-display site-title">Spooky Spots</h1>
+			<div class="type-step-1">An exhaustive directory of spooky & horror-themed businesses & locations</div>
+		</header>
+
 		<slot />
+
+		<footer class="site-footer">
+			<p>PicNic by Mariel Nils. Distributed by velvetyne.fr.</p>
+			<p>© 2026 Spooky Spots. All rights reserved.</p>
+		</footer>
 	</body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
+	.site-header {
+		text-align: center;
+	}
+
+	.site-title {
+		line-height: 1;
+		font-size: 12vw;
+		text-align: center;
+		margin: 0 0 var(--space-l);
+		text-transform: capitalize;
+	}
+
+	/* Footer */
+	.site-footer {
+		margin-block-start: var(--space-3xl);
 	}
 </style>

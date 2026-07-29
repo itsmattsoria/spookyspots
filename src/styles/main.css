@@ -1,0 +1,54 @@
+@import './variables.css';
+@import './typography.css';
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: inherit;
+  }
+
+  html {
+    box-sizing: border-box;
+  }
+
+  @view-transition {
+    navigation: auto;
+  }
+
+  body {
+    padding: var(--space-m);
+    scrollbar-gutter: stable;
+    font-family: var(--font-sans);
+    color: var(--color-fg-primary);
+    -moz-font-smoothing: antialiased;
+    -webkit-font-smoothing: antialiased;
+    background-color: var(--color-bg-primary);
+  }
+
+  ::selection {
+    color: var(--color-fg-primary);
+    background-color: var(--color-fg-weak);
+  }
+  ::-moz-selection {
+    color: var(--color-fg-primary);
+    background-color: var(--color-fg-weak);
+  }
+  ::target-text {
+    color: var(--color-fg-primary);
+    background-color: var(--color-bg-accent);
+  }
+
+  *:focus-visible {
+    outline-offset: 0.35rem;
+  }
+
+  a {
+    color: currentColor;
+    text-underline-offset: 0.15em;
+  }
+
+  svg {
+    transition: fill 0.2s ease-out;
+  }
+}

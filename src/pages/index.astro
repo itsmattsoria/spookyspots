@@ -1,11 +1,11 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import Directory from '../components/Directory.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const directoryResponse = await fetch(import.meta.env.DIRECTORY_DATA_SOURCE_URL);
+const directoryData = await directoryResponse.json();
 ---
 
-<Layout>
-	<Welcome />
+<Layout pageTitle="Directory of Spooky & Horror-themed Businesses & Locations">
+	<Directory directoryData={directoryData} />
 </Layout>
