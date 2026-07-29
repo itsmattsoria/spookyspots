@@ -1,17 +1,10 @@
+@import './reset.css';
 @import './variables.css';
 @import './typography.css';
+@import './ui.css';
+@import './filters.css';
 
 @layer base {
-  *,
-  *::before,
-  *::after {
-    box-sizing: inherit;
-  }
-
-  html {
-    box-sizing: border-box;
-  }
-
   @view-transition {
     navigation: auto;
   }
@@ -46,6 +39,7 @@
   a {
     color: currentColor;
     text-underline-offset: 0.15em;
+    text-decoration-thickness: 0.05em;
   }
 
   svg {

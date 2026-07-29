@@ -1,0 +1,21 @@
+.tag {
+  display: inline-flex;
+  font-size: var(--step--2);
+  font-family: var(--font-mono);
+  color: var(--color-bg-primary);
+  border-radius: var(--space-3xs);
+  background-color: var(--color-fg-primary);
+  padding: var(--space-3xs) var(--space-2xs);
+
+  &:has(svg) {
+    padding: 0;
+    aspect-ratio: 1 / 1;
+
+    svg {
+      width: auto;
+      height: var(--step-2);
+      color: var(--color-bg-primary);
+      transition: transform 0.2s ease-in-out;
+    }
+  }
+}

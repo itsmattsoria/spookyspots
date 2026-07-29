@@ -1,0 +1,32 @@
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-s);
+  justify-content: space-between;
+  margin-block-start: var(--space-3xs);
+}
+
+.filters-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: var(--space-s);
+}
+
+.search-input {
+  width: 100%;
+  max-width: 300px;
+  font-size: var(--step-10);
+  color: var(--color-fg-primary);
+  border-radius: var(--space-3xs);
+  padding: var(--space-2xs) var(--space-xs);
+  background-color: var(--color-bg-primary);
+  transition: border-color 0.2s ease-in-out;
+  border: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
+
+  &:focus-visible {
+    border-color: var(--color-fg-primary);
+  }
+}
