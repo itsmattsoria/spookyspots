@@ -5,19 +5,23 @@ const typeColors = [
   },
   {
     name: 'Bar',
-    color: '#F8159D',
+    color: '#B93E87',
   },
   {
     name: 'Restaurant',
-    color: '#731DDC',
+    color: '#8B75B4',
   },
   {
     name: 'Store',
-    color: '#F78148',
+    color: '#F66308',
+  },
+  {
+    name: 'Gallery',
+    color: '#FAC689',
   },
   {
     name: 'Other',
-    color: '#F78148',
+    color: '#F66308',
   },
 ];
 

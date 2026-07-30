@@ -15,7 +15,7 @@ const geoJsonData = directoryData.map((item: Listing) => {
     },
     properties: {
       name: item.name,
-      type: item.type,
+      type: item.type.toLowerCase(),
       description: item.description,
       address: item.address,
       website: item.website,
@@ -23,6 +23,7 @@ const geoJsonData = directoryData.map((item: Listing) => {
       phone: item.phone,
       mapUrl: item.mapUrl,
       color: typeColors.find((type) => type.name === item.type)?.color || '#F78148',
+      tags: item.tags?.toLowerCase()
     }
   }
 });
@@ -35,9 +36,23 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   <div class="filters">
     <div class="filters-wrapper">
-      <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
-      <span class="sort" data-sort="name">Sort by name</span>
-      <span class="sort" data-sort="type">Sort by type</span>
+      <div>
+        <label for="search">Search</label>
+        <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
+      </div>
+      
+      <div>
+        <label for="type-filter">Filter by type</label>
+        <select id="type-filter">
+          <option value="all">All</option>
+          <option value="store">Store</option>
+          <option value="coffee shop">Coffee Shop</option>
+          <option value="restaurant">Restaurant</option>
+          <option value="bar">Bar</option>
+          <option value="gallery">Gallery</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
     </div>
     <div>{listingCount} spooky spots</div>
   </div>
@@ -48,11 +63,11 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   <ul id="directory-list" class="directory-list list" role="list">
     {sortedDirectoryData.map((item: Listing) => (
-      <li class="directory-list-item" data-type={item.type}>
+      <li class="directory-list-item" data-type={item.type.toLowerCase()}>
         <details>
           <summary>
             <div class="directory-list-item-header">
-              <div class="type-step-2 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
+              <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
              <div class="type-step--1">
               <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> - {item.address && <a href={item.mapUrl} target="_blank" class="location">{item.address}</a>}
              </div>
@@ -68,6 +83,9 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
             {item.phone && <div>{item.phone}</div>}
             <div>
               {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
+            </div>
+            <div>
+              <a href={`mailto:matt.soria@hey.com?subject=Spooky Spots:Change Report for ${item.name}`} class="color-warning">Report a change to this spot</a>
             </div>
           </div>
         </details>
@@ -112,7 +130,8 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       const name = feature.properties.name;
       const type = feature.properties.type;
       const address = feature.properties.address;
-      const layerID = feature.properties.name.toLowerCase() + ' ' + feature.properties.type.toLowerCase() + ' ' + feature.properties.address.toLowerCase();
+      const tags = feature.properties.tags;
+      const layerID = feature.properties.name.toLowerCase() + ' ' + feature.properties.type.toLowerCase() + ' ' + feature.properties.address.toLowerCase() + ' ' + feature.properties.tags?.toLowerCase();
 
       // Add a layer for this symbol type if it hasn't been added already.
       if (!map.getLayer(layerID)) {
@@ -125,10 +144,40 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
             'circle-color': ['get', 'color'],
           },
           // use filter to only show the features that match the search value
-          'filter': ['all', ['==', ['get', 'name'], name], ['==', ['get', 'type'], type], ['==', ['get', 'address'], address]]
+          'filter': ['all', ['==', ['get', 'name'], name], ['==', ['get', 'type'], type], ['==', ['get', 'address'], address], ['==', ['get', 'tags'], tags]]
         });
 
         layerIDs.push(layerID);
+
+        map.on('click', layerID, (e) => {
+          // Extract the coordinate where the user clicked
+          const coordinates = e.lngLat;
+
+          const popupContent = `
+            <div class="font-sans type-step-0">${e.features[0].properties.name}</div>
+            <div><span class="tag" style="--tag-color: ${e.features[0].properties.color}">${e.features[0].properties.type}</span></div>
+            <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}</a></div>
+            <div>${e.features[0].properties.phone}</div>
+            <div><a href="${e.features[0].properties.website}" target="_blank">Website</a></div>
+            <div><a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
+          `;
+
+          // 2. Create and render the popup
+          new Popup()
+            .setLngLat(coordinates)
+            .setHTML(popupContent)
+            .addTo(map);
+        });
+
+        // 3. Optional: Change the cursor to a pointer when hovering over the layer
+        map.on('mouseenter', layerID, () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+
+        // 4. Optional: Reset the cursor when leaving the layer
+        map.on('mouseleave', layerID, () => {
+          map.getCanvas().style.cursor = '';
+        });
       }
     });
   });
@@ -145,50 +194,9 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   // Add zoom and rotation controls to the map.
   map.addControl(new NavigationControl({
-    visualizePitch: true,
-    visualizeRoll: true,
     showZoom: true,
     showCompass: true
   }));
-
-  // When a click event occurs on a feature in the spookySpots layer, open a popup at the
-  // location of the feature, with description HTML from its properties.
-  map.on('click', 'spookySpots', (e) => {
-      const coordinates = e.features[0].geometry.coordinates.slice();
-      const popupContent = `
-        <div class="type-step-0">${e.features[0].properties.name}</div>
-        <div class="font-mono type-step--1">
-        <div>${e.features[0].properties.type}</div>
-        <div>${e.features[0].properties.description}</div>
-        <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}</a></div>
-        <div>${e.features[0].properties.phone}</div>
-        <div><a href="${e.features[0].properties.website}" target="_blank">Website</a></div>
-        <div><a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
-        </div>
-      `;
-
-      // Ensure that if the map is zoomed out such that multiple
-      // copies of the feature are visible, the popup appears
-      // over the copy being pointed to.
-      while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-      }
-
-      new Popup()
-        .setLngLat(coordinates)
-        .setHTML(popupContent)
-        .addTo(map);
-  });
-
-  // Change the cursor to a pointer when the mouse is over the places layer.
-  map.on('mouseenter', 'places', () => {
-    map.getCanvas().style.cursor = 'pointer';
-  });
-
-  // Change it back to a pointer when it leaves.
-  map.on('mouseleave', 'places', () => {
-    map.getCanvas().style.cursor = '';
-  })
 
   // List.js functionality for search, sort, and filter
   const directoryList = new List('directory-container', {
@@ -197,6 +205,39 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       'location', 
       { data: ['type'] }
     ],
+  });
+
+  // Filtering functionality
+  const typeFilter = document.getElementById('type-filter');
+  typeFilter?.addEventListener('change', function() {
+    const selectedType = this.value;
+
+    if (selectedType === 'all') {
+      directoryList.filter();
+      layerIDs.forEach((layerID) => {
+        map.setLayoutProperty(
+          layerID,
+          'visibility',
+          'visible'
+        );
+      });
+    } else {
+      directoryList.filter(function(item) {
+        return item.values().type === selectedType;
+      });
+
+      layerIDs.forEach((layerID) => {
+        map.setLayoutProperty(
+          layerID,
+          'visibility',
+          layerID.includes(selectedType) ? 'visible' : 'none'
+        );
+      });
+    }
+    // when we can be sure the forEach loop is complete, recenter the map
+    setTimeout(() => {
+      recenterMap();
+    }, 0);
   });
 
   // Filter the sources in the map when the search input changes
@@ -210,7 +251,14 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         layerID.includes(value) ? 'visible' : 'none'
       );
     });
-    // recenter the map based on the layers that are still visibile
+    // when we can be sure the forEach loop is complete, recenter the map
+    setTimeout(() => {
+      recenterMap();
+    }, 0);
+  });
+
+  // Recenter the map based on visible layers
+  function recenterMap() {
     const visibleLayers = layerIDs.filter((layerID) => map.getLayoutProperty(layerID, 'visibility') === 'visible');
     if (visibleLayers.length < layerIDs.length) {
       const features = map.queryRenderedFeatures({ layers: visibleLayers });
@@ -223,24 +271,22 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         maxZoom: 15
       });
     } else {
-      // recenter the map when the search input is cleared
+      // recenter map when all layers are visible
       map.setCenter([-98.5, 39.8]);
       map.setZoom(3);
     }
-  });
-
+  }
 </script>
 
 <style is:global>
   .directory-container {
     display: grid;
     align-items: start;
-    gap: var(--space-l);
     margin-block: var(--space-l);
 
     @media screen and (min-width: 768px) {
-      row-gap: var(--space-s);
-      grid-template-columns: 1fr 1fr;
+      column-gap: var(--space-xs);
+      grid-template-columns: repeat(12, 1fr);
     }
   }
 
@@ -258,8 +304,8 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   /* Directory List */
   .directory-list {
     margin: 0;
-    padding: 0;
     list-style: none;
+    padding: var(--space-l) 0 0;
 
     .directory-list-item {
       border-top: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
@@ -306,6 +352,11 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         padding-block-end: var(--space-s);
       }
     }
+
+    @media screen and (min-width: 768px) {
+      padding: 0;
+      grid-column: 1 / 5;
+    }
   }
 
   /* Map */
@@ -316,6 +367,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     @media screen and (min-width: 768px) {
       order: 2;
       position: sticky;
+      grid-column: 5 / -1;
       top: calc(var(--space-l) * 2);
       height: calc(100vh - (var(--space-l) * 3));
     }
@@ -332,6 +384,11 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     }
   
     .maplibregl-popup-content {
+      display: flex;
+      gap: var(--space-3xs);
+      flex-direction: column;
+      font-size: var(--step--2);
+      font-family: var(--font-mono);
       color: var(--color-bg-primary);
     }
   }

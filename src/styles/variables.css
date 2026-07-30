@@ -1,6 +1,8 @@
 :root {
   --color-fg-primary: #f5efe0;
   --color-bg-primary: #111;
+  --color-accent: #f66308;
+  --color-warning: #fdc456;
 
   /* Fonts */
   --font-display: 'Canoe Rental', sans-serif;

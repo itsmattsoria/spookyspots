@@ -24,7 +24,7 @@
   padding: var(--space-2xs) var(--space-xs);
   background-color: var(--color-bg-primary);
   transition: border-color 0.2s ease-in-out;
-  border: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
+  border: 1px solid var(--color-fg-primary);
 
   &:focus-visible {
     border-color: var(--color-fg-primary);

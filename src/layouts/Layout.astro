@@ -17,8 +17,13 @@ const { pageTitle } = Astro.props;
 	</head>
 	<body>
 		<header class="site-header">
-			<h1 class="font-display site-title">Spooky Spots</h1>
-			<div class="type-step-1">An exhaustive directory of spooky & horror-themed businesses & locations</div>
+			<div>
+				<h1 class="font-display site-title">Spooky Spots</h1>
+				<div class="type-step-0">A directory of spooky & horror-themed businesses & locations</div>
+			</div>
+			<div>
+				<a href="https://forms.gle/doTGS7f46pdkyYHx5" target="_blank" class="button">Submit a spot!</a>
+			</div>
 		</header>
 
 		<slot />
@@ -26,20 +31,56 @@ const { pageTitle } = Astro.props;
 		<footer class="site-footer">
 			<p>© 2026 Spooky Spots. All rights reserved.</p>
 		</footer>
+
+		<!-- credit: https://kirgroup.net/blog/2025/07/21-SVG-Hand-Drawing-without-js.html -->
+		<svg id="filter-svg" style="position: absolute; width: 0px; height: 0px;" xmlns="http://www.w3.org/2000/svg" version="1.1" width="400" height="400" viewBox="0 0 400 400">
+			<defs>
+				<filter id="distortionFilter">
+					<feTurbulence
+						type="turbulence"
+						baseFrequency="0.01"
+						numOctaves="4"
+						seed="1"
+						result="noise"
+						id="feTurbulence1">
+						<animate
+						id="turbolente-baseFrequency-anim"
+						attributeName="baseFrequency"
+						values="0.01;0.013;0.011;0.012"
+						calcMode="discrete"
+						repeatCount="indefinite"
+						dur=".4" />
+					</feTurbulence>
+					<feDisplacementMap
+					in="SourceGraphic"
+					in2="noise"
+					scale="2"
+					xChannelSelector="R"
+					yChannelSelector="G"
+					id="feDisplacementMap1" />
+				</filter>
+			</defs>
+		</svg>
 	</body>
 </html>
 
-<style>
+<style is:global>
 	.site-header {
-		text-align: center;
+		display: flex;
+		align-items: start;
+		gap: var(--space-xs);
+		justify-content: space-between;
 	}
 
 	.site-title {
-		line-height: 0.9;
-		font-size: 12vw;
-		text-align: center;
-		margin: 0 0 var(--space-l);
+		font-size: 9vw;
+		line-height: 0.8;
 		text-transform: capitalize;
+		margin: 0 0 var(--space-xs);
+
+		@media screen and (prefers-reduced-motion: no-preference) {
+			filter: url("#distortionFilter");
+		}
 	}
 
 	/* Footer */

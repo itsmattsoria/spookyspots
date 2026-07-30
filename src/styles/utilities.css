@@ -1,0 +1,9 @@
+.color-fg-primary {
+  color: var(--color-fg-primary);
+}
+.color-bg-primary {
+  background-color: var(--color-bg-primary);
+}
+.color-warning {
+  color: var(--color-warning);
+}

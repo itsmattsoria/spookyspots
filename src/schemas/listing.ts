@@ -5,13 +5,13 @@ const listingSchema = z.object({
   description: z.string(),
   address: z.string(),
   latLong: z.string(),
-  website: z.string(),
-  instagram: z.string(),
-  phone: z.string(),
+  website: z.string().optional(),
+  instagram: z.string().optional(),
+  phone: z.string().optional(),
   mapUrl: z.string(),
   type: z.string(),
-  tags: z.array(z.string()),
-  images: z.array(z.string()),
+  tags: z.string().optional(),
+  images: z.array(z.string()).optional(),
 });
 
 export type Listing = z.infer<typeof listingSchema>;
