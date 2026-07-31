@@ -11,7 +11,7 @@
   }
 
   body {
-    padding: var(--space-m);
+    padding: 0;
     scrollbar-gutter: stable;
     font-family: var(--font-sans);
     color: var(--color-fg-primary);

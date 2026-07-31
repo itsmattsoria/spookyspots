@@ -31,6 +31,14 @@ const geoJsonData = directoryData.map((item: Listing) => {
   }
 });
 
+// Get all unique tags from directoryData
+const uniqueTags = [...new Set(
+  directoryData
+    .filter(item => item.tags) // Ensure the tags column isn't empty for this row
+    .flatMap(item => item.tags.split(',').map(tag => tag.trim())) // Split by comma and remove whitespace
+)].sort((a, b) => a.localeCompare(b));
+console.log(uniqueTags);
+
 // resort directoryData alphabetically by name
 const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.name.localeCompare(b.name));
 ---
@@ -66,36 +74,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       <div class="input-wrap">
         <label for="sort-by">Filter by tags</label>
         <select multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
-          <option value="art">Art</option>
-          <option value="antiques">Antiques</option>
-          <option value="bizarre">Bizarre</option>
-          <option value="clothing">Clothing</option>
-          <option value="coffee">Coffee</option>
-          <option value="collectibles">Collectibles</option>
-          <option value="costumes">Costumes</option>
-          <option value="d&d">D&D</option>
-          <option value="decorations">Decorations</option>
-          <option value="drinks">Drinks</option>
-          <option value="events">Events</option>
-          <option value="food">Food</option>
-          <option value="gifts">Gifts</option>
-          <option value="goth">Goth</option>
-          <option value="halloween">Halloween</option>
-          <option value="horror">Horror</option>
-          <option value="immersive">Immersive</option>
-          <option value="masks">Masks</option>
-          <option value="memorabilia">Memorabilia</option>
-          <option value="metal">Metal</option>
-          <option value="oddities">Oddities</option>
-          <option value="occult">Occult</option>
-          <option value="photo ops">Photo Ops</option>
-          <option value="pizza">Pizza</option>
-          <option value="scares">Scares</option>
-          <option value="screenings">Screenings</option>
-          <option value="tacos">Tacos</option>
-          <option value="taxidermy">Taxidermy</option>
-          <option value="vampires">Vampires</option>
-          <option value="vegan">Vegan</option>
+          {uniqueTags.map((tag) => tag !== '' && <option value={tag}>{tag}</option>)}
         </select>
       </div>
 
@@ -490,16 +469,17 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     position: sticky;
     grid-column: 1 / -1;
     padding-block: var(--space-s);
+    padding-inline: var(--space-m);
     background-color: var(--color-bg-primary);
   }
 
   /* Directory List */
   .directory-list-wrapper {
-    padding: var(--space-l) 0 0;
+    padding: var(--space-l) var(--space-m) 0;
 
     @media screen and (min-width: 768px) {
-      padding: 0;
       grid-column: 1 / 5;
+      padding: 0 var(--space-m);
     }
   }
   .directory-list {
@@ -563,7 +543,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       order: 2;
       position: sticky;
       grid-column: 5 / -1;
-      top: calc(var(--space-l) * 2);
+      top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs));
       height: calc(100vh - (var(--space-l) * 3));
     }
   }
