@@ -49,15 +49,17 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       
       <div class="input-wrap">
         <label for="type-filter">Filter by type</label>
-        <select id="type-filter">
-          <option value="">All</option>
-          <option value="store">Store</option>
-          <option value="coffee shop">Coffee Shop</option>
-          <option value="restaurant">Restaurant</option>
-          <option value="bar">Bar</option>
-          <option value="gallery">Gallery</option>
-          <option value="other">Other</option>
-        </select>
+        <div class="select-wrap">
+          <select id="type-filter">
+            <option value="">All</option>
+            <option value="store">Store</option>
+            <option value="coffee shop">Coffee Shop</option>
+            <option value="restaurant">Restaurant</option>
+            <option value="bar">Bar</option>
+            <option value="gallery">Gallery</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
       </div>
 
       <div class="input-wrap">
@@ -90,45 +92,50 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         </button>
       </div>
     </div>
-    <div>{listingCount} spooky spots</div>
+    <div><span id="listing-count">{listingCount}</span> spooky spots</div>
   </div>
 
   <div class="map-container">
     <div id="map"></div>
   </div>
 
-  <ul id="directory-list" class="directory-list list" role="list">
-    {sortedDirectoryData.map((item: Listing) => (
-      <li class="directory-list-item" data-type={item.type.toLowerCase()} data-tags={item.tags} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags}>
-        <details>
-          <summary>
-            <div class="directory-list-item-header">
-              <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
-             <div class="type-step--1">
-              <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> - {item.address && <a href={item.mapUrl} target="_blank" class="location">{item.address}</a>}
-             </div>
-            </div>
-            <div>
-              <div class="tag summary-icon">
-                <CaratIcon />
+  <div class="directory-list-wrapper">
+    <ul id="directory-list" class="directory-list list" role="list">
+      {sortedDirectoryData.map((item: Listing) => (
+        <li class="directory-list-item" data-type={item.type.toLowerCase()} data-tags={item.tags} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags}>
+          <details>
+            <summary>
+              <div class="directory-list-item-header">
+                <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
+               <div class="type-step--1">
+                <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> - {item.address && <a href={item.mapUrl} target="_blank" class="location">{item.address}</a>}
+               </div>
+              </div>
+              <div>
+                <div class="tag summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div class="directory-list-item-content">
+              {item.description && <div>{item.description}</div>}
+              {item.phone && <div>{item.phone}</div>}
+              <div>
+                {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
+              </div>
+              <div>
+                <a href={`mailto:matt.soria@hey.com?subject=Spooky Spots:Change Report for ${item.name}`} class="color-warning">Report a change to this spot</a>
               </div>
             </div>
-          </summary>
-          <div class="directory-list-item-content">
-            {item.description && <div>{item.description}</div>}
-            {item.phone && <div>{item.phone}</div>}
-            <div>
-              {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
-            </div>
-            <div>
-              <a href={`mailto:matt.soria@hey.com?subject=Spooky Spots:Change Report for ${item.name}`} class="color-warning">Report a change to this spot</a>
-            </div>
-          </div>
-        </details>
-      </li>
-    ))}
-  </ul>
-
+          </details>
+        </li>
+      ))}
+    </ul>
+  
+    <div id="empty-state" style="display: none;">
+      <p><span class="font-display type-step-2">Boo!</span> Sorry, but we didn't find any spooky spots that match your search. Try again with different filters.</p>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -239,6 +246,8 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   }));
 
   // List.js functionality for search, sort, and filter
+  const listingCount = document.getElementById('listing-count');
+  const emptyState = document.getElementById('empty-state');
   const directoryList = new List('directory-container', {
     valueNames: [
       'name', 
@@ -247,6 +256,16 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       { data: ['tags'] },
       { data: ['id'] }
     ],
+  });
+
+  directoryList.on('updated', () => {
+    const listingLength = directoryList.matchingItems.length;
+    listingCount.textContent = listingLength.toString();
+    if (listingLength === 0) {
+      emptyState.style.display = 'block';
+    } else {
+      emptyState.style.display = 'none';
+    }
   });
 
   // Filtering functionality
@@ -318,6 +337,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   // Clear input field on button click
   clearBtn.addEventListener('click', () => {
     searchInput.value = '';
+    filterState.search = '';
     toggleClearBtn();
     applyFilters();
     searchInput.focus();
@@ -460,10 +480,18 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   }
 
   /* Directory List */
+  .directory-list-wrapper {
+    padding: var(--space-l) 0 0;
+
+    @media screen and (min-width: 768px) {
+      padding: 0;
+      grid-column: 1 / 5;
+    }
+  }
   .directory-list {
     margin: 0;
+    padding: 0;
     list-style: none;
-    padding: var(--space-l) 0 0;
 
     .directory-list-item {
       border-top: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
@@ -509,11 +537,6 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         margin-top: var(--space-s);
         padding-block-end: var(--space-s);
       }
-    }
-
-    @media screen and (min-width: 768px) {
-      padding: 0;
-      grid-column: 1 / 5;
     }
   }
 
