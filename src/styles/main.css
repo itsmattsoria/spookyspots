@@ -21,16 +21,35 @@
   }
 
   ::selection {
-    color: var(--color-fg-primary);
-    background-color: var(--color-fg-weak);
+    color: var(--color-bg-primary);
+    background-color: var(--color-fg-primary);
   }
   ::-moz-selection {
-    color: var(--color-fg-primary);
-    background-color: var(--color-fg-weak);
+    color: var(--color-bg-primary);
+    background-color: var(--color-fg-primary);
   }
   ::target-text {
     color: var(--color-fg-primary);
     background-color: var(--color-bg-accent);
+  }
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+  &:-webkit-scrollbar-track {
+    background: var(--color-bg-primary);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-fg-primary);
+    border-radius: 10px;
+    border: 2px solid var(--color-bg-primary);
+  }
+
+  @supports not selector(::-webkit-scrollbar) {
+    body {
+      scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    }
   }
 
   *:focus-visible {

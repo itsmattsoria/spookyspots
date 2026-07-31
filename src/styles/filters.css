@@ -5,28 +5,171 @@
   gap: var(--space-s);
   justify-content: space-between;
   margin-block-start: var(--space-3xs);
-}
 
-.filters-wrapper {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--space-s);
-}
+  .filters-wrapper {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: var(--space-s);
+  }
 
-.search-input {
-  width: 100%;
-  max-width: 300px;
-  font-size: var(--step-10);
-  color: var(--color-fg-primary);
-  border-radius: var(--space-3xs);
-  padding: var(--space-2xs) var(--space-xs);
-  background-color: var(--color-bg-primary);
-  transition: border-color 0.2s ease-in-out;
-  border: 1px solid var(--color-fg-primary);
+  .search-input,
+  select,
+  .ms-choice {
+    width: 100%;
+    line-height: 1;
+    height: var(--space-l);
+    font-size: var(--step--1);
+    color: var(--color-bg-primary);
+    border-radius: var(--space-3xs);
+    padding: var(--space-2xs) var(--space-xs);
+    background-color: var(--color-fg-primary);
+    border: 1px solid var(--color-fg-primary);
 
-  &:focus-visible {
-    border-color: var(--color-fg-primary);
+    &::selection {
+      color: var(--color-fg-primary);
+      background-color: var(--color-bg-primary);
+    }
+    &::-moz-selection {
+      color: var(--color-fg-primary);
+      background-color: var(--color-bg-primary);
+    }
+
+    &::placeholder {
+      opacity: 0.5;
+      color: var(--color-bg-primary);
+    }
+  }
+
+  .search-input-wrap {
+    position: relative;
+
+    .clear-btn {
+      top: 50%;
+      right: 0;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      appearance: none;
+      background: none;
+      position: absolute;
+      width: var(--step-1);
+      height: var(--step-1);
+      transform: translateY(-50%);
+    }
+
+    input:placeholder-shown + #clearBtn {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+
+  .search-input {
+    width: 300px;
+  }
+
+  .input-wrap {
+    label {
+      display: block;
+      margin-block-end: var(--space-3xs);
+    }
+  }
+
+  /* Clear Filters Button */
+  .clear-filters-btn {
+    padding: 0;
+    border: none;
+    display: flex;
+    cursor: pointer;
+    appearance: none;
+    background: none;
+    align-items: center;
+    margin-block-end: 8px;
+    gap: var(--space-3xs);
+    font-size: var(--step--1);
+    color: var(--color-fg-primary);
+
+    &.hidden {
+      display: none;
+    }
+
+    svg {
+      width: var(--step-1);
+      height: var(--step-1);
+    }
+
+    > span {
+      text-underline-offset: 0.15em;
+    }
+
+    &:hover,
+    &:focus {
+      > span {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  /* Multiple Select */
+  .ms-parent {
+    --ms-icon-size: var(--step-1);
+    --ms-chevron-icon-size: var(--step-1);
+    --ms-checkbox-icon-container-border: 1px solid var(--color-bg-primary);
+    --ms-checkbox-color: var(--color-bg-primary);
+    --ms-checkbox-hover-color: var(--color-bg-primary);
+    --ms-placeholder-color: color-mix(
+      in srgb,
+      var(--color-bg-primary) 50%,
+      transparent
+    );
+
+    &.ms-parent-open {
+      .ms-choice {
+        border-radius: var(--space-3xs) var(--space-3xs) 0 0;
+      }
+    }
+  }
+
+  .ms-choice {
+    width: 300px;
+
+    > span {
+      line-height: 1;
+    }
+  }
+
+  .ms-drop {
+    --ms-drop-background: var(--color-fg-primary);
+    --ms-option-highlight-bg-color: var(--color-accent);
+    border-radius: 0 0 var(--space-3xs) var(--space-3xs);
+  }
+
+  .ms-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-bg-primary) var(--color-fg-primary);
+  }
+
+  .ms-search input {
+    --ms-search-input-color: var(--color-bg-primary);
+    --ms-search-input-bg-color: var(--color-fg-primary);
+    font-size: var(--step--1);
+    font-family: var(--font-mono);
+    padding-block: var(--space-3xs);
+  }
+
+  .ms-drop ul > li label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3xs);
+    font-size: var(--step--1);
+    margin: var(--space-3xs) 0;
+  }
+
+  .ms-icon-caret {
+    --ms-icon-caret-icon-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M11.9999 13.1714L16.9497 8.22168L18.3639 9.63589L11.9999 15.9999L5.63599 9.63589L7.0502 8.22168L11.9999 13.1714Z'%3E%3C/path%3E%3C/svg%3E");
+  }
+  .ms-icon-close {
+    --ms-icon-close-icon-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z'%3E%3C/path%3E%3C/svg%3E");
   }
 }

@@ -2,6 +2,8 @@
 const { directoryData } = Astro.props;
 import type { Listing } from '../schemas/listing';
 import { typeColors } from '../schemas/typeColors';
+import CloseIcon from '../assets/close.svg';
+import CaratIcon from '../assets/carat.svg';
 
 const listingCount = directoryData.length;
 
@@ -14,6 +16,7 @@ const geoJsonData = directoryData.map((item: Listing) => {
       coordinates: [Number(item.latLong.split(',')[1]), Number(item.latLong.split(',')[0])]
     },
     properties: {
+      id: item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags,
       name: item.name,
       type: item.type.toLowerCase(),
       description: item.description,
@@ -23,7 +26,7 @@ const geoJsonData = directoryData.map((item: Listing) => {
       phone: item.phone,
       mapUrl: item.mapUrl,
       color: typeColors.find((type) => type.name === item.type)?.color || '#F78148',
-      tags: item.tags?.toLowerCase()
+      tags: item.tags
     }
   }
 });
@@ -36,15 +39,18 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   <div class="filters">
     <div class="filters-wrapper">
-      <div>
+      <div class="input-wrap">
         <label for="search">Search</label>
-        <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
+        <div class="search-input-wrap">
+          <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
+          <button id="clearBtn" class="clear-btn" aria-label="Clear search"><CloseIcon /></button>
+        </div>
       </div>
       
-      <div>
+      <div class="input-wrap">
         <label for="type-filter">Filter by type</label>
         <select id="type-filter">
-          <option value="all">All</option>
+          <option value="">All</option>
           <option value="store">Store</option>
           <option value="coffee shop">Coffee Shop</option>
           <option value="restaurant">Restaurant</option>
@@ -52,6 +58,36 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
           <option value="gallery">Gallery</option>
           <option value="other">Other</option>
         </select>
+      </div>
+
+      <div class="input-wrap">
+        <label for="sort-by">Filter by tags</label>
+        <select multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
+          <option value="art">Art</option>
+          <option value="clothing">Clothing</option>
+          <option value="coffee">Coffee</option>
+          <option value="collectibles">Collectibles</option>
+          <option value="costumes">Costumes</option>
+          <option value="decorations">Decorations</option>
+          <option value="drinks">Drinks</option>
+          <option value="events">Events</option>
+          <option value="food">Food</option>
+          <option value="horror">Horror</option>
+          <option value="masks">Masks</option>
+          <option value="memorabilia">Memorabilia</option>
+          <option value="metal">Metal</option>
+          <option value="photo ops">Photo Ops</option>
+          <option value="screenings">Screenings</option>
+          <option value="tacos">Tacos</option>
+          <option value="vegan">Vegan</option>
+        </select>
+      </div>
+
+      <div>
+        <button id="clearAllFilters" class="clear-filters-btn hidden" aria-hidden="true">
+          <CloseIcon />
+          <span>Clear filters</span>
+        </button>
       </div>
     </div>
     <div>{listingCount} spooky spots</div>
@@ -63,7 +99,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   <ul id="directory-list" class="directory-list list" role="list">
     {sortedDirectoryData.map((item: Listing) => (
-      <li class="directory-list-item" data-type={item.type.toLowerCase()}>
+      <li class="directory-list-item" data-type={item.type.toLowerCase()} data-tags={item.tags} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags}>
         <details>
           <summary>
             <div class="directory-list-item-header">
@@ -74,7 +110,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
             </div>
             <div>
               <div class="tag summary-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 15.0006L7.75732 10.758L9.17154 9.34375L12 12.1722L14.8284 9.34375L16.2426 10.758L12 15.0006Z"></path></svg>
+                <CaratIcon />
               </div>
             </div>
           </summary>
@@ -101,6 +137,10 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
   import styleUrl from '../assets/map-theme.json';
   import List from 'list.js';
+  import { type MultipleSelectInstance, multipleSelect } from 'multiple-select-vanilla';
+  import 'multiple-select-vanilla/dist/styles/css/multiple-select.css';
+  const mapInitialCenter: [number, number] = [0, 0];
+  const mapInitialZoom = 1;
 
   setWorkerUrl(workerUrl);
 
@@ -111,8 +151,8 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   const map = new Map({
       container: 'map', // container id
       style: styleUrl, // style URL
-      center: [-98.5, 39.8], // starting position [lng, lat]
-      zoom: 3 // starting zoom
+      center: mapInitialCenter, // starting position [lng, lat]
+      zoom: mapInitialZoom // starting zoom
   });
 
   const layerIDs: Array<string> = [];
@@ -131,7 +171,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       const type = feature.properties.type;
       const address = feature.properties.address;
       const tags = feature.properties.tags;
-      const layerID = feature.properties.name.toLowerCase() + ' ' + feature.properties.type.toLowerCase() + ' ' + feature.properties.address.toLowerCase() + ' ' + feature.properties.tags?.toLowerCase();
+      const layerID = feature.properties.name.toLowerCase() + ' ' + feature.properties.type.toLowerCase() + ' ' + feature.properties.address.toLowerCase() + ' ' + feature.properties.tags;
 
       // Add a layer for this symbol type if it hasn't been added already.
       if (!map.getLayer(layerID)) {
@@ -203,16 +243,105 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     valueNames: [
       'name', 
       'location', 
-      { data: ['type'] }
+      { data: ['type'] },
+      { data: ['tags'] },
+      { data: ['id'] }
     ],
   });
 
   // Filtering functionality
+  const clearAllFilters = document.getElementById('clearAllFilters');
+  const filterState = {
+    search: '',
+    type: '',
+    // Each Multiple Select Vanilla instance registers its own facet key here,
+    // e.g. { tags: [...], neighborhood: [...] }
+    facets: {} as Record<string, string[]>
+  }
+
+  clearAllFilters?.addEventListener('click', () => {
+    resetFilters();
+  });
+
   const typeFilter = document.getElementById('type-filter');
   typeFilter?.addEventListener('change', function() {
     const selectedType = this.value;
+    filterState.type = selectedType;
+    applyFilters();
+  });
 
-    if (selectedType === 'all') {
+  // Multiple select functionality
+  // Each instance controls its own facet, identified by the element's `data-facet`.
+  // Facets are matched generically against a matching `data-<facet>` on each list item
+  // and `feature.properties[<facet>]` on the map data.
+  const multiSelectInstances: MultipleSelectInstance[] = [];
+  const multipleSelectElements = document.querySelectorAll<HTMLSelectElement>('.multiple-select');
+
+  multipleSelectElements.forEach((filterElement) => {
+    const facet = filterElement.dataset.facet;
+    if (!facet) return; // skip any multiselect that hasn't declared a facet
+
+    // Initialize this facet's state
+    filterState.facets[facet] = [];
+
+    const instance = multipleSelect(filterElement, {
+      maxHeight: 200,
+      filter: true,
+      showClear: true,
+      showSearchClear: true,
+      selectAll: false,
+      onChange: () => {
+        filterState.facets[facet] = instance.getSelects('value') as string[];
+        applyFilters();
+      }
+    }) as MultipleSelectInstance;
+
+    multiSelectInstances.push(instance);
+  });
+
+
+  // Filter the sources in the map when the search input changes
+  const searchInput = document.getElementById('search');
+  const clearBtn = document.getElementById('clearBtn');
+
+  // Toggle button visibility based on text existence
+  function toggleClearBtn() {
+    if (searchInput?.value.length > 0) {
+      clearBtn.removeAttribute('hidden');
+      clearBtn.style.opacity = '1';
+      clearBtn.style.pointerEvents = 'auto';
+    } else {
+      clearBtn.setAttribute('hidden', '');
+    }
+  }
+
+  // Clear input field on button click
+  clearBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    toggleClearBtn();
+    applyFilters();
+    searchInput.focus();
+  });
+
+  searchInput?.addEventListener('keyup', (e: Event) => {
+    toggleClearBtn();
+
+    const value = e.target.value.trim().toLowerCase();
+    filterState.search = value;
+    applyFilters();
+  });
+
+  // Apply filters to the map and list
+  function applyFilters() {
+    const flattenedFilterState = [
+      filterState.search,
+      filterState.type,
+      ...Object.values(filterState.facets).flat()
+    ].join(' ').trim();
+
+
+    if (flattenedFilterState === '') {
+      directoryList.search();
       directoryList.filter();
       layerIDs.forEach((layerID) => {
         map.setLayoutProperty(
@@ -221,49 +350,49 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
           'visible'
         );
       });
+      hideClearAllFilters();
     } else {
+      // true only if every active facet matches this item/feature
+      const matchesAllFacets = (getValue: (facet: string) => string) =>
+        Object.entries(filterState.facets).every(([facet, selected]) =>
+          selected.every(val => (getValue(facet) || '').includes(val))
+        );
+
       directoryList.filter(function(item) {
-        return item.values().type === selectedType;
+        const matchesSearch = item.values().id.toLowerCase().includes(filterState.search);
+        const matchesType = filterState.type === '' || item.values().type === filterState.type;
+        const matchesFacets = matchesAllFacets(facet => item.values()[facet]);
+
+        return matchesSearch && matchesType && matchesFacets;
       });
 
-      layerIDs.forEach((layerID) => {
+      directoryData.forEach((feature) => {
+        const matchesSearch = feature.properties.id.includes(filterState.search);
+        const matchesType = filterState.type === '' || feature.properties.type === filterState.type;
+        const matchesFacets = matchesAllFacets(facet => feature.properties[facet]);
+
         map.setLayoutProperty(
-          layerID,
+          feature.properties.id,
           'visibility',
-          layerID.includes(selectedType) ? 'visible' : 'none'
+          matchesSearch && matchesType && matchesFacets ? 'visible' : 'none'
         );
       });
-    }
-    // when we can be sure the forEach loop is complete, recenter the map
-    setTimeout(() => {
-      recenterMap();
-    }, 0);
-  });
 
-  // Filter the sources in the map when the search input changes
-  const searchInput = document.getElementById('search');
-  searchInput?.addEventListener('keyup', (e: Event) => {
-    const value = e.target.value.trim().toLowerCase();
-    layerIDs.forEach((layerID) => {
-      map.setLayoutProperty(
-        layerID,
-        'visibility',
-        layerID.includes(value) ? 'visible' : 'none'
-      );
-    });
-    // when we can be sure the forEach loop is complete, recenter the map
-    setTimeout(() => {
-      recenterMap();
-    }, 0);
-  });
+      showClearAllFilters();
+    }
+
+    recenterMap();
+  }
 
   // Recenter the map based on visible layers
   function recenterMap() {
     const visibleLayers = layerIDs.filter((layerID) => map.getLayoutProperty(layerID, 'visibility') === 'visible');
-    if (visibleLayers.length < layerIDs.length) {
-      const features = map.queryRenderedFeatures({ layers: visibleLayers });
+    const visibleSet = new Set(visibleLayers);
+    const visibleFeatures = directoryData.filter(feature => visibleSet.has(feature.properties.id));
+
+    if (visibleFeatures.length < layerIDs.length) {
       const bounds = new LngLatBounds();
-      features.forEach((feature) => {
+      visibleFeatures.forEach((feature) => {
         bounds.extend(feature.geometry.coordinates);
       });
       map.fitBounds(bounds, {
@@ -272,9 +401,38 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       });
     } else {
       // recenter map when all layers are visible
-      map.setCenter([-98.5, 39.8]);
-      map.setZoom(3);
+      map.setCenter(mapInitialCenter);
+      map.setZoom(mapInitialZoom);
     }
+  }
+
+  function resetFilters() {
+    searchInput.value = '';
+    typeFilter.value = '';
+    // Uncheck every Multiple Select Vanilla instance
+    multiSelectInstances.forEach((instance) => {
+      instance.uncheckAll();
+    });
+
+    filterState.search = '';
+    filterState.type = '';
+    Object.keys(filterState.facets).forEach((facet) => {
+      filterState.facets[facet] = [];
+    });
+
+    applyFilters();
+    toggleClearBtn();
+  }
+
+  function showClearAllFilters() {
+    clearAllFilters?.classList.remove('hidden');
+    clearAllFilters?.setAttribute('aria-hidden', 'false');
+  }
+
+  function hideClearAllFilters() {
+    clearAllFilters?.classList.add('hidden');
+    clearAllFilters?.setAttribute('aria-hidden', 'true');
+    clearAllFilters?.blur();
   }
 </script>
 

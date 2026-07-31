@@ -14,6 +14,7 @@
   "dependencies": {
     "astro": "^7.1.5",
     "list.js": "^2.3.1",
-    "maplibre-gl": "^6.0.0"
+    "maplibre-gl": "^6.0.0",
+    "multiple-select-vanilla": "^5.2.1"
   }
 }
