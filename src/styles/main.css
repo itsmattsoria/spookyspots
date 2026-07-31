@@ -60,6 +60,11 @@
     color: currentColor;
     text-underline-offset: 0.15em;
     text-decoration-thickness: 0.05em;
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-accent);
+    }
   }
 
   svg {

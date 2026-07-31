@@ -12,6 +12,18 @@
     flex-wrap: wrap;
     align-items: end;
     gap: var(--space-s);
+
+    > * {
+      width: 100%;
+      flex-grow: 1;
+    }
+
+    @media screen and (min-width: 768px) {
+      > * {
+        width: auto;
+        flex-grow: 0;
+      }
+    }
   }
 
   .search-input,
@@ -84,7 +96,7 @@
   }
 
   .search-input {
-    width: 300px;
+    min-width: 300px;
   }
 
   .input-wrap {
@@ -141,6 +153,7 @@
       var(--color-bg-primary) 50%,
       transparent
     );
+    width: 100%;
 
     &.ms-parent-open {
       .ms-choice {
@@ -150,7 +163,8 @@
   }
 
   .ms-choice {
-    width: 300px;
+    width: 100%;
+    min-width: 300px;
     padding-inline-end: 0;
 
     > span {

@@ -29,7 +29,7 @@ const { pageTitle } = Astro.props;
 		<slot />
 
 		<footer class="site-footer">
-			<p>© 2026 Spooky Spots. All rights reserved.</p>
+			<p>© 2026 Spooky Spots. A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
 		</footer>
 
 		<!-- credit: https://kirgroup.net/blog/2025/07/21-SVG-Hand-Drawing-without-js.html -->
@@ -67,16 +67,22 @@ const { pageTitle } = Astro.props;
 <style is:global>
 	.site-header {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: start;
-		gap: var(--space-xs);
+		row-gap: var(--space-s);
+		column-gap: var(--space-xs);
 		justify-content: space-between;
 	}
 
 	.site-title {
-		font-size: 9vw;
+		font-size: 15vw;
 		line-height: 0.8;
 		text-transform: capitalize;
 		margin: 0 0 var(--space-xs);
+
+		@media screen and (min-width: 768px) {
+			font-size: 9vw;
+		}
 	}
 
 	/* Footer */
