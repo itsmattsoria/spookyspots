@@ -12,8 +12,12 @@ const typeColors = [
     color: '#8B75B4',
   },
   {
-    name: 'Store',
+    name: 'Shop',
     color: '#F66308',
+  },
+  {
+    name: 'Bookstore',
+    color: '#DC2525',
   },
   {
     name: 'Gallery',
