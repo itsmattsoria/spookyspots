@@ -18,7 +18,7 @@ const { pageTitle } = Astro.props;
 	<body>
 		<header class="site-header">
 			<div>
-				<h1 class="font-display site-title">Spooky Spots</h1>
+				<h1 class="font-display site-title distortion-filter">Spooky Spots</h1>
 				<div class="type-step-0">A directory of spooky & horror-themed businesses & locations</div>
 			</div>
 			<div>
@@ -77,10 +77,6 @@ const { pageTitle } = Astro.props;
 		line-height: 0.8;
 		text-transform: capitalize;
 		margin: 0 0 var(--space-xs);
-
-		@media screen and (prefers-reduced-motion: no-preference) {
-			filter: url("#distortionFilter");
-		}
 	}
 
 	/* Footer */

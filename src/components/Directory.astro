@@ -133,7 +133,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     </ul>
   
     <div id="empty-state" style="display: none;">
-      <p><span class="font-display type-step-2">Boo!</span> Sorry, but we didn't find any spooky spots that match your search. Try again with different filters.</p>
+      <p><span class="font-display type-step-4 distortion-filter">Boo!</span><br> Sorry, but we didn't find any spooky spots that match your search. Try again with different filters.</p>
     </div>
   </div>
 </div>
@@ -153,7 +153,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   const directoryData = JSON.parse(document.getElementById('directory-container')?.dataset.directoryData || '[]');
 
-  await document.fonts.load("16px 'Ginza Loop'");
+  // await document.fonts.load("16px 'Ginza Loop'");
 
   const map = new Map({
       container: 'map', // container id
@@ -359,7 +359,6 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       ...Object.values(filterState.facets).flat()
     ].join(' ').trim();
 
-
     if (flattenedFilterState === '') {
       directoryList.search();
       directoryList.filter();
@@ -429,15 +428,16 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   function resetFilters() {
     searchInput.value = '';
     typeFilter.value = '';
-    // Uncheck every Multiple Select Vanilla instance
-    multiSelectInstances.forEach((instance) => {
-      instance.uncheckAll();
-    });
 
     filterState.search = '';
     filterState.type = '';
     Object.keys(filterState.facets).forEach((facet) => {
       filterState.facets[facet] = [];
+    });
+
+    // Uncheck every Multiple Select Vanilla instance
+    multiSelectInstances.forEach((instance) => {
+      instance.uncheckAll();
     });
 
     applyFilters();
@@ -452,7 +452,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   function hideClearAllFilters() {
     clearAllFilters?.classList.add('hidden');
     clearAllFilters?.setAttribute('aria-hidden', 'true');
-    clearAllFilters?.blur();
+    // clearAllFilters?.blur();
   }
 </script>
 
