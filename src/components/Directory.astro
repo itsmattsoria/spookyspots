@@ -66,7 +66,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
             <option value="restaurant">Restaurant</option>
             <option value="bar">Bar</option>
             <option value="gallery">Gallery</option>
-            <option value="other">Other</option>
+            <option value="museum">Museum</option>
           </select>
         </div>
       </div>
@@ -85,7 +85,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         </button>
       </div>
     </div>
-    <div><span id="listing-count">{listingCount}</span> spooky spots</div>
+    <div class="font-display type-step--1 distortion-filter"><span id="listing-count">{listingCount}</span> spooky spots</div>
   </div>
 
   <div class="map-container">
@@ -101,7 +101,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
               <div class="directory-list-item-header">
                 <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
                <div class="type-step--1">
-                <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> - {item.address && <a href={item.mapUrl} target="_blank" class="location">{item.address}</a>}
+                <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <a href={item.mapUrl} target="_blank" class="location font-mono type-step--2">{item.address}</a>}
                </div>
               </div>
               <div>
@@ -114,10 +114,10 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
               {item.description && <div>{item.description}</div>}
               {item.phone && <div>{item.phone}</div>}
               <div>
-                {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
+                {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
               </div>
               <div>
-                <a href={`mailto:matt.soria@hey.com?subject=Spooky Spots:Change Report for ${item.name}`} class="color-warning">Report a change to this spot</a>
+                <a href={`mailto:matt.soria@hey.com?subject=Spooky Spots:Change Report for ${item.name}`} class="color-warning type-step--2">Report a change to this spot</a>
               </div>
             </div>
           </details>
@@ -125,7 +125,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       ))}
     </ul>
   
-    <div id="empty-state" style="display: none;">
+    <div id="empty-state" class="empty-state" style="display: none;">
       <p><span class="font-display type-step-4 distortion-filter">Boo!</span><br> Sorry, but we didn't find any spooky spots that match your search. Try again with different filters.</p>
     </div>
   </div>
@@ -180,7 +180,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
           'type': 'circle',
           'source': 'spookySpots',
           'paint': {
-            'circle-radius': 8,
+            'circle-radius': 7,
             'circle-color': ['get', 'color'],
           },
           // use filter to only show the features that match the search value
@@ -198,8 +198,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
             <div><span class="tag" style="--tag-color: ${e.features[0].properties.color}">${e.features[0].properties.type}</span></div>
             <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}</a></div>
             <div>${e.features[0].properties.phone}</div>
-            <div><a href="${e.features[0].properties.website}" target="_blank">Website</a></div>
-            <div><a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
+            <div><a href="${e.features[0].properties.website}" target="_blank">Website</a> | <a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
           `;
 
           // 2. Create and render the popup
@@ -409,7 +408,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       });
       map.fitBounds(bounds, {
         padding: 100,
-        maxZoom: 15
+        maxZoom: 10
       });
     } else {
       // recenter map when all layers are visible
@@ -445,7 +444,6 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
   function hideClearAllFilters() {
     clearAllFilters?.classList.add('hidden');
     clearAllFilters?.setAttribute('aria-hidden', 'true');
-    // clearAllFilters?.blur();
   }
 </script>
 
@@ -479,7 +477,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
     @media screen and (min-width: 768px) {
       grid-column: 1 / 5;
-      padding: 0 var(--space-m);
+      padding: 0 0 0 var(--space-m);
     }
   }
   .directory-list {
@@ -528,10 +526,14 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         gap: var(--space-2xs);
         flex-direction: column;
         font-size: var(--step--1);
-        margin-top: var(--space-s);
+        margin-top: var(--space-2xs);
         padding-block-end: var(--space-s);
       }
     }
+  }
+
+  .empty-state {
+    padding-block-start: var(--space-l);
   }
 
   /* Map */
@@ -543,8 +545,8 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       order: 2;
       position: sticky;
       grid-column: 5 / -1;
-      top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs));
       height: calc(100vh - (var(--space-l) * 3));
+      top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs));
     }
   }
 
@@ -552,7 +554,6 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     width: 100%;
     height: 100%;
     overflow: hidden;
-    border-radius: var(--space-3xs);
     
     &.maplibregl-map {
       font-family: var(--font-sans);
@@ -566,6 +567,9 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       font-family: var(--font-mono);
       color: var(--color-bg-primary);
     }
-  }
 
+    @media screen and (min-width: 768px) {
+      border-radius: var(--space-3xs) 0 0 var(--space-3xs);
+    }
+  }
 </style>

@@ -24,6 +24,10 @@ const typeColors = [
     color: '#FAC689',
   },
   {
+    name: 'Museum',
+    color: '#2bd0db',
+  },
+  {
     name: 'Other',
     color: '#F66308',
   },

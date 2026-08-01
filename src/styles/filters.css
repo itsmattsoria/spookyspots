@@ -39,9 +39,9 @@
     font-size: var(--step--1);
     color: var(--color-bg-primary);
     border-radius: var(--space-3xs);
-    padding: var(--space-2xs) var(--space-xs);
     background-color: var(--color-fg-primary);
     border: 1px solid var(--color-fg-primary);
+    padding: var(--space-2xs) var(--space-xs) var(--space-3xs);
 
     &::selection {
       color: var(--color-fg-primary);
