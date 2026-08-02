@@ -13,22 +13,29 @@ const { pageTitle } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Spooky Spots - {pageTitle}</title>
+		<title>Spoooky.biz - {pageTitle}</title>
 	</head>
 	<body>
-		<header class="site-header">
+		<header class="site-header site-padding">
 			<div>
-				<h1 class="font-display site-title distortion-filter">Spooky Spots</h1>
-				<div class="type-step-0">A directory of spooky & horror-themed businesses & locations</div>
+				<h1 class="font-display site-title distortion-filter">Spoooky.biz</h1>
+				<div class="type-step-0">A directory of spooky & horror-themed businesses</div>
 			</div>
-			<div>
-				<a href="https://forms.gle/doTGS7f46pdkyYHx5" target="_blank" class="button">Submit a spot!</a>
-			</div>
+			<nav aria-label="Primary">
+				<ul class="site-nav">
+					<li>
+						<a href="#faq">FAQs</a>
+					</li>
+					<li>
+						<a href="https://forms.gle/doTGS7f46pdkyYHx5" target="_blank" class="button">Submit a spot!</a>
+					</li>
+				</ul>
+			</nav>
 		</header>
 
 		<slot />
 
-		<footer class="site-footer">
+		<footer class="site-footer site-padding">
 			<p>© 2026 Spooky Spots. A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
 		</footer>
 
@@ -61,6 +68,16 @@ const { pageTitle } = Astro.props;
 				</filter>
 			</defs>
 		</svg>
+
+		<!-- border turbulence filter -->
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="0" width="0">
+			<defs>
+				<filter id="border-noise">
+					<feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="4" />
+					<feDisplacementMap in="SourceGraphic" scale="2" />
+				</filter>
+			</defs>
+		</svg>
 	</body>
 </html>
 
@@ -71,7 +88,6 @@ const { pageTitle } = Astro.props;
 		align-items: start;
 		row-gap: var(--space-s);
 		column-gap: var(--space-xs);
-		padding-inline: var(--space-m);
 		justify-content: space-between;
 		padding-block-start: var(--space-m);
 	}
@@ -85,6 +101,12 @@ const { pageTitle } = Astro.props;
 		@media screen and (min-width: 768px) {
 			font-size: 9vw;
 		}
+	}
+
+	.site-nav {
+		display: flex;
+		align-items: center;
+		gap: var(--space-s);
 	}
 
 	/* Footer */

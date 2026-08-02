@@ -63,7 +63,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
 <div id="directory-container" class="directory-container" data-directory-data={JSON.stringify(geoJsonData)}>
 
-  <div class="filters">
+  <div class="filters site-padding">
     <div class="filters-wrapper">
       <div class="input-wrap">
         <label for="search">Search</label>
@@ -97,7 +97,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         </button>
       </div>
     </div>
-    <div class="font-display type-step--1 distortion-filter"><span id="listing-count">{listingCount}</span> spooky spots</div>
+    <div class="font-display type-step-0 distortion-filter"><span id="listing-count">{listingCount}</span> spooky spots</div>
   </div>
 
   <div class="map-container">
@@ -166,6 +166,15 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       center: mapInitialCenter, // starting position [lng, lat]
       zoom: mapInitialZoom // starting zoom
   });
+
+  // Disable mouse wheel scrolling soom, but keep pinch-to-zoom enabled
+  map.getCanvasContainer().addEventListener('wheel', (e) => {
+    // Trackpad pinch gestures pass ctrlKey: true natively in modern browsers
+    if (!e.ctrlKey) {
+      // Stop standard mouse-wheel scrolling from reaching MapLibre
+      e.stopPropagation();
+    }
+  }, { capture: true, passive: false });
 
   const layerIDs: Array<string> = [];
 
@@ -479,13 +488,12 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
     position: sticky;
     grid-column: 1 / -1;
     padding-block: var(--space-s);
-    padding-inline: var(--space-m);
     background-color: var(--color-bg-primary);
   }
 
   /* Directory List */
   .directory-list-wrapper {
-    padding: var(--space-l) var(--space-m) 0;
+    padding: var(--space-l) var(--space-xs-m) 0;
 
     @media screen and (min-width: 768px) {
       grid-column: 1 / 5;
