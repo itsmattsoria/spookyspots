@@ -31,13 +31,31 @@ const geoJsonData = directoryData.map((item: Listing) => {
   }
 });
 
-// Get all unique tags from directoryData
-const uniqueTags = [...new Set(
-  directoryData
-    .filter(item => item.tags) // Ensure the tags column isn't empty for this row
-    .flatMap(item => item.tags.split(',').map(tag => tag.trim())) // Split by comma and remove whitespace
-)].sort((a, b) => a.localeCompare(b));
-console.log(uniqueTags);
+// Get all unique types, and their count
+const uniqueTypes: { name: string, count: number }[] = [];
+const uniqueTags: { name: string, count: number }[] = [];
+directoryData.forEach((item: Listing) => {
+  // Get the types
+  const type = uniqueTypes.find((type) => type.name === item.type);
+  if (type) {
+    type.count++;
+  } else {
+    uniqueTypes.push({ name: item.type, count: 1 });
+  }
+
+  // Get the tags
+  const tags = item.tags.split(',').map(tag => tag.trim());
+  tags.forEach((tagItem) => {
+    const tag = uniqueTags.find((tag) => tag.name === tagItem);
+    if (tag) {
+      tag.count++;
+    } else {
+      uniqueTags.push({ name: tagItem, count: 1 });
+    }
+  });
+});
+uniqueTypes.sort((a, b) => b.count - a.count);
+uniqueTags.sort((a, b) => a.name.localeCompare(b.name));
 
 // resort directoryData alphabetically by name
 const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.name.localeCompare(b.name));
@@ -60,13 +78,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
         <div class="select-wrap">
           <select id="type-filter">
             <option value="">All</option>
-            <option value="shop">Shop</option>
-            <option value="bookstore">Bookstore</option>
-            <option value="coffee shop">Coffee Shop</option>
-            <option value="restaurant">Restaurant</option>
-            <option value="bar">Bar</option>
-            <option value="gallery">Gallery</option>
-            <option value="museum">Museum</option>
+            {uniqueTypes.map((type) => <option value={type.name}>{type.name} ({type.count})</option>)}
           </select>
         </div>
       </div>
@@ -74,7 +86,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
       <div class="input-wrap">
         <label for="sort-by">Filter by tags</label>
         <select multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
-          {uniqueTags.map((tag) => tag !== '' && <option value={tag}>{tag}</option>)}
+          {uniqueTags.map((tag) => tag.name !== '' && <option value={tag.name}>{tag.name} ({tag.count})</option>)}
         </select>
       </div>
 
