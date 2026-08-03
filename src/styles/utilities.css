@@ -26,4 +26,8 @@
   li + li {
     margin-block-start: var(--space-2xs);
   }
+
+  + * {
+    margin-block-start: var(--space-s);
+  }
 }
