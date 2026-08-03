@@ -2,13 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Directory from '../components/Directory.astro';
 import CaratIcon from '../assets/carat.svg';
-
-const directoryResponse = await fetch(import.meta.env.DIRECTORY_DATA_SOURCE_URL);
-const directoryData = await directoryResponse.json();
 ---
 
 <Layout pageTitle="Directory of Spooky & Horror-themed Businesses & Locations">
-	<Directory directoryData={directoryData} />
+	<Directory />
 
 	<section id="faq" class="faq-section site-padding">
 		<h2 class="type-step-3 font-display distortion-filter">Frequently Asked Questions</h2>

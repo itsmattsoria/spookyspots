@@ -12,6 +12,7 @@ const listingSchema = z.object({
   type: z.string(),
   tags: z.string().optional(),
   images: z.array(z.string()).optional(),
+  unlisted: z.boolean().default(false),
 });
 
 export type Listing = z.infer<typeof listingSchema>;

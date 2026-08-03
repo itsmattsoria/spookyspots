@@ -1,14 +1,24 @@
 ---
-const { directoryData } = Astro.props;
+import { fetchRecords } from '../scripts/fetch-records';
 import type { Listing } from '../schemas/listing';
 import { typeColors } from '../schemas/typeColors';
 import CloseIcon from '../assets/close.svg';
 import CaratIcon from '../assets/carat.svg';
 
-const listingCount = directoryData.length;
+let directoryData = null;
+let errorMessage = null;
+
+try  {
+	directoryData = await fetchRecords();
+} catch (err: any) {
+	errorMessage = err.message;
+  console.error(err);
+}
+
+const listingCount = directoryData?.length;
 
 // make a copy of directoryData and reformat it to be a GeoJSON object
-const geoJsonData = directoryData.map((item: Listing) => {
+const geoJsonData = directoryData?.map((item: Listing) => {
   return {
     type: 'Feature',
     geometry: {
@@ -34,7 +44,7 @@ const geoJsonData = directoryData.map((item: Listing) => {
 // Get all unique types, and their count
 const uniqueTypes: { name: string, count: number }[] = [];
 const uniqueTags: { name: string, count: number }[] = [];
-directoryData.forEach((item: Listing) => {
+directoryData?.forEach((item: Listing) => {
   // Get the types
   const type = uniqueTypes.find((type) => type.name.toLowerCase() === item.type.toLowerCase());
   if (type) {
@@ -44,8 +54,8 @@ directoryData.forEach((item: Listing) => {
   }
 
   // Get the tags
-  const tags = item.tags.split(',').map(tag => tag.trim());
-  tags.forEach((tagItem) => {
+  const tags = item?.tags?.split(',').map(tag => tag.trim());
+  tags?.forEach((tagItem) => {
     const tag = uniqueTags.find((tag) => tag.name === tagItem);
     if (tag) {
       tag.count++;
@@ -58,7 +68,7 @@ uniqueTypes.sort((a, b) => b.count - a.count);
 uniqueTags.sort((a, b) => a.name.localeCompare(b.name));
 
 // resort directoryData alphabetically by name
-const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.name.localeCompare(b.name));
+const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.name.localeCompare(b.name));
 ---
 
 <div id="directory-container" class="directory-container" data-directory-data={JSON.stringify(geoJsonData)}>
@@ -106,7 +116,7 @@ const sortedDirectoryData = directoryData.sort((a: Listing, b: Listing) => a.nam
 
   <div class="directory-list-wrapper">
     <ul id="directory-list" class="directory-list list" role="list">
-      {sortedDirectoryData.map((item: Listing) => (
+      {sortedDirectoryData?.map((item: Listing) => (
         <li class="directory-list-item" data-type={item.type.toLowerCase()} data-tags={item.tags} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags}>
           <details>
             <summary>
