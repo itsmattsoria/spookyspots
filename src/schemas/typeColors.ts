@@ -29,7 +29,7 @@ const typeColors = [
   },
   {
     name: 'Other',
-    color: '#F66308',
+    color: '#0d24f7',
   },
 ];
 

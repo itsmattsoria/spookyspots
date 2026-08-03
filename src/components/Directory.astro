@@ -36,11 +36,11 @@ const uniqueTypes: { name: string, count: number }[] = [];
 const uniqueTags: { name: string, count: number }[] = [];
 directoryData.forEach((item: Listing) => {
   // Get the types
-  const type = uniqueTypes.find((type) => type.name === item.type);
+  const type = uniqueTypes.find((type) => type.name.toLowerCase() === item.type.toLowerCase());
   if (type) {
     type.count++;
   } else {
-    uniqueTypes.push({ name: item.type, count: 1 });
+    uniqueTypes.push({ name: item.type.toLowerCase(), count: 1 });
   }
 
   // Get the tags
