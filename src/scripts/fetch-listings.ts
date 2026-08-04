@@ -1,6 +1,6 @@
 import { type Listing } from '../schemas/listing';
 
-export async function fetchRecords(): Promise<Listing[]> {
+export async function fetchListings(): Promise<Listing[]> {
   try {
     const response = await fetch(import.meta.env.DIRECTORY_DATA_SOURCE_URL);
 
@@ -10,14 +10,14 @@ export async function fetchRecords(): Promise<Listing[]> {
 
     const rawData = await response.json();
 
-    // filter out records whose 'unlisted' property is true
-    const filteredRecords = rawData.filter(
-      record => record.name && !record.unlisted
+    // filter out listings whose 'unlisted' property is true
+    const filteredListings = rawData.filter(
+      listing => listing.name && !listing.unlisted
     );
 
-    return filteredRecords;
+    return filteredListings;
   } catch (error) {
-    console.error('Failed to fetch records:', error);
+    console.error('Failed to fetch listings:', error);
     throw error;
   }
 }

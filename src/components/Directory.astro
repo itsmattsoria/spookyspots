@@ -1,5 +1,5 @@
 ---
-import { fetchRecords } from '../scripts/fetch-records';
+import { fetchListings } from '../scripts/fetch-listings';
 import type { Listing } from '../schemas/listing';
 import { typeColors } from '../schemas/typeColors';
 import CloseIcon from '../assets/close.svg';
@@ -9,7 +9,7 @@ let directoryData = null;
 let errorMessage = null;
 
 try  {
-	directoryData = await fetchRecords();
+	directoryData = await fetchListings();
 } catch (err: any) {
 	errorMessage = err.message;
   console.error(err);

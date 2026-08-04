@@ -100,7 +100,7 @@ import CaratIcon from '../assets/carat.svg';
 						</div>
 					</summary>
 					<div>
-						<p>Yeah, sometimes it's not obvious. I just try to make a judgement on whether a significant portion of the business is themed or selling things that are clearly in the realm of spooky. So maybe it's a collectibles shop that doesn't exclusively sell horror collectibles, but it's still got enough to make a horror fan want to go—I'll count that, for example.</p>
+						<p>Yeah, sometimes it's not obvious. I just try to make a judgement on whether a significant portion of the business is themed or selling things that are clearly in the realm of spooky. So maybe it's a collectibles shop that doesn't exclusively sell horror collectibles, but it's still got enough to make a horror fan want to check out—I'll count that, for example.</p>
 					</div>
 				</details>
 			</li>
@@ -129,17 +129,35 @@ import CaratIcon from '../assets/carat.svg';
 					</div>
 				</details>
 			</li>
+			<li>
+				<details>
+					<summary>
+						<div class="summary-text">
+							Can I pay to have my business listed first?
+						</div>
+						<div>
+							<div class="tag summary-icon">
+								<CaratIcon />
+							</div>
+						</div>
+					</summary>
+					<div>
+						<p>Nah. At least not at this moment. Part of the reason I started this project was because some alternatives were inundated with ads and paid listings. I'm not saying I'll never do it, but I'd need to find a way to do it that doesn't feel annoying. <a href="mailto:hellospoookybiz@gmail.com" target="_blank">Let me know</a> if you have any ideas!</p>
+					</div>
+				</details>
+			</li>
 		</ul>
 	</section>
 </Layout>
 
 <style>
 	.faq-section {
+		max-width: 60ch;
+		margin-inline: auto;
 		margin-block-start: var(--space-3xl);
 	}
 
 	.faq-list {
-		max-width: 60ch;
 		margin-block-start: var(--space-l);
 
 		> li {
@@ -176,7 +194,7 @@ import CaratIcon from '../assets/carat.svg';
 			}
 
 			+ div {
-				padding-block: var(--space-xs);
+				padding-block: var(--space-xs) var(--space-l);
 			}
 		}
 	}
