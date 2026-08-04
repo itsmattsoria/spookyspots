@@ -61,10 +61,12 @@
     text-underline-offset: 0.15em;
     text-decoration-thickness: 0.05em;
 
-    &:hover,
-    &:focus-visible {
-      font-style: italic;
-      color: var(--color-accent);
+    &:not(.button) {
+      &:hover,
+      &:focus-visible {
+        font-style: italic;
+        color: var(--color-accent);
+      }
     }
   }
 

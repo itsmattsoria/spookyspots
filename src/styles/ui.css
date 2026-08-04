@@ -22,6 +22,7 @@
 }
 
 .button {
+  --button-rotation: 0deg;
   align-items: center;
   display: inline-flex;
   gap: var(--space-3xs);
@@ -32,10 +33,12 @@
   border-radius: var(--space-3xs);
   font-family: var(--font-display);
   background-color: var(--color-accent);
+  transform: rotate(var(--button-rotation));
   padding: var(--space-2xs) var(--space-2xs) var(--space-3xs);
 
   &:hover,
   &:focus-visible {
+    transform: rotate(0deg);
     text-decoration: underline;
     color: var(--color-bg-primary);
   }
