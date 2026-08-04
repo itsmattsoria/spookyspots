@@ -18,7 +18,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "background-color": "#fafaf8",
+        "background-color": "#f5efe0",
         "background-opacity": 1
       }
     },
@@ -238,7 +238,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "fill-color": "#d4dadc",
+        "fill-color": "#A39F9C",
         "fill-antialias": true,
         "fill-translate-anchor": "map",
         "fill-opacity": 1
@@ -1280,7 +1280,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1307,7 +1307,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1334,7 +1334,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1366,7 +1366,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1399,7 +1399,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1432,7 +1432,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1466,7 +1466,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1879,7 +1879,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1912,7 +1912,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1946,7 +1946,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -1980,7 +1980,7 @@
           ]
         },
         "line-opacity": 1,
-        "line-color": "#fff"
+        "line-color": "#ffffff"
       }
     },
     {
@@ -2118,7 +2118,7 @@
       },
       "paint": {
         "text-color": "#abb6be",
-        "text-halo-color": "#d4dadc",
+        "text-halo-color": "#A39F9C",
         "text-halo-width": 1,
         "text-halo-blur": 0
       }
@@ -2157,7 +2157,7 @@
       },
       "paint": {
         "text-color": "#abb6be",
-        "text-halo-color": "#d4dadc",
+        "text-halo-color": "#A39F9C",
         "text-halo-width": 1,
         "text-halo-blur": 0
       }
@@ -2487,7 +2487,7 @@
             [6, "#b9c2c9"]
           ]
         },
-        "text-halo-color": "#fafaf8",
+        "text-halo-color": "#f5efe0",
         "text-halo-width": 1
       }
     },
@@ -2534,7 +2534,7 @@
             [6, "#b9c2c9"]
           ]
         },
-        "text-halo-color": "#fafaf8",
+        "text-halo-color": "#f5efe0",
         "text-halo-width": 1
       }
     },
@@ -2566,7 +2566,7 @@
       },
       "paint": {
         "text-color": "#97a4ae",
-        "text-halo-color": "#fafaf8",
+        "text-halo-color": "#f5efe0",
         "text-halo-width": 0
       }
     },
@@ -2596,7 +2596,7 @@
       },
       "paint": {
         "text-color": "#697b89",
-        "text-halo-color": "#fafaf8",
+        "text-halo-color": "#f5efe0",
         "text-halo-width": 1
       }
     },
@@ -2961,7 +2961,7 @@
       },
       "paint": {
         "text-color": "#838383",
-        "text-halo-color": "#fff",
+        "text-halo-color": "#ffffff",
         "text-halo-width": 1
       }
     },
@@ -2991,7 +2991,7 @@
       },
       "paint": {
         "text-color": "#838383",
-        "text-halo-color": "#fff",
+        "text-halo-color": "#ffffff",
         "text-halo-width": 1
       }
     },
@@ -3033,7 +3033,7 @@
       },
       "paint": {
         "text-color": "#838383",
-        "text-halo-color": "#fff",
+        "text-halo-color": "#ffffff",
         "text-halo-width": 1
       }
     },
@@ -3075,7 +3075,7 @@
       },
       "paint": {
         "text-color": "#838383",
-        "text-halo-color": "#fff",
+        "text-halo-color": "#ffffff",
         "text-halo-width": 1
       }
     },
