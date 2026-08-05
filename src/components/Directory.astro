@@ -266,7 +266,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
           const popupContent = `
             <div class="font-sans type-step-0">${e.features[0].properties.name}</div>
             <div><span class="tag" style="--tag-color: ${e.features[0].properties.color}">${e.features[0].properties.type}</span></div>
-            <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}</a></div>
+            <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}<span class="external-icon">↗</span></a></div>
             <div>${e.features[0].properties.phone}</div>
             <div><a href="${e.features[0].properties.website}" target="_blank">Website</a> | <a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
           `;
@@ -281,11 +281,13 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         // 3. Optional: Change the cursor to a pointer when hovering over the layer
         map.on('mouseenter', layerID, () => {
           map.getCanvas().style.cursor = 'pointer';
+          map.setPaintProperty(layerID, 'circle-radius', 15);
         });
 
         // 4. Optional: Reset the cursor when leaving the layer
         map.on('mouseleave', layerID, () => {
           map.getCanvas().style.cursor = '';
+          map.setPaintProperty(layerID, 'circle-radius', mapCircleRadius);
         });
       }
     });
@@ -334,21 +336,13 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   directoryListItems?.forEach((item) => {
     const layerId = item.getAttribute('data-id');
 
-    item.addEventListener('mouseenter', (e) => {
-      const target = e.target as HTMLElement;
-      const targetItem = target.closest('.directory-list-item');
-      if (item) {
-        map.moveLayer(layerId);
-        map.setPaintProperty(layerId, 'circle-radius', 15);
-      }
+    item.addEventListener('mouseenter', () => {
+      map.moveLayer(layerId);
+      map.setPaintProperty(layerId, 'circle-radius', 15);
     });
 
-    item.addEventListener('mouseleave', (e) => {
-      const target = e.target as HTMLElement;
-      const targetItem = target.closest('.directory-list-item');
-      if (item) {
-        map.setPaintProperty(layerId, 'circle-radius', mapCircleRadius);
-      }
+    item.addEventListener('mouseleave', () => {
+      map.setPaintProperty(layerId, 'circle-radius', mapCircleRadius);
     });
 
     item.addEventListener('click', (e) => {
