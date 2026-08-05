@@ -21,6 +21,33 @@
   }
 }
 
+button.tag,
+a.tag {
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(in srgb, var(--tag-color) 90%, #000);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+summary:has(.tag) {
+  &:hover,
+  &:focus-visible {
+    .tag {
+      background-color: color-mix(in srgb, var(--tag-color) 90%, #000);
+    }
+  }
+
+  &:active {
+    .tag {
+      transform: scale(0.97);
+    }
+  }
+}
+
 .button {
   --button-rotation: 0deg;
   position: relative;

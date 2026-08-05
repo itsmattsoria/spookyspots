@@ -117,7 +117,16 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   </div>
 
   <div class="map-container">
-    <div id="map"></div>
+    <div id="map">
+      <div id="zoom-msg" class="zoom-msg">
+        <div class="zoom-msg-content">
+          <span>Use ctrl + scroll, or "pinch" to zoom the map</span>
+          <button id="zoom-msg-dismiss" class="zoom-msg-dismiss tag" aria-label="Dismiss zoom message">
+            <CloseIcon />
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="directory-list-wrapper">
@@ -184,13 +193,32 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   });
 
   // Disable mouse wheel scrolling soom, but keep pinch-to-zoom enabled
+  const zoomMsg = document.getElementById('zoom-msg');
+  const zoomMsgDismiss = document.getElementById('zoom-msg-dismiss');
+  let zoomMsgDismissed = false;
+  let zoomMsgTimeout;
+
   map.getCanvasContainer().addEventListener('wheel', (e) => {
-    // Trackpad pinch gestures pass ctrlKey: true natively in modern browsers
     if (!e.ctrlKey) {
+      // Display the scroll message when a wheel event is detected
+      if (!zoomMsgDismissed) {
+        zoomMsg.style.display = 'block';
+
+        clearTimeout(zoomMsgTimeout);
+        zoomMsgTimeout = setTimeout(() => {
+          zoomMsg.style.display = 'none';
+        }, 2000);
+      }
+      
       // Stop standard mouse-wheel scrolling from reaching MapLibre
       e.stopPropagation();
     }
   }, { capture: true, passive: false });
+
+  zoomMsgDismiss?.addEventListener('click', () => {
+    zoomMsgDismissed = true;
+    zoomMsg.style.display = 'none';
+  });
 
   const layerIDs: Array<string> = [];
 
@@ -593,6 +621,32 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     
     &.maplibregl-map {
       font-family: var(--font-sans);
+    }
+
+    .zoom-msg {
+      display: none;
+      top: 50%; 
+      left: 50%; 
+      z-index: 999;
+      max-width: 280px;
+      position: absolute;
+      font-size: var(--step-0);
+      color: var(--color-fg-primary); 
+      border-radius: var(--space-3xs); 
+      transform: translate(-50%, -50%); 
+      padding: var(--space-xs) var(--space-s); 
+      background: color-mix(in srgb, var(--color-bg-primary) 70%, transparent); 
+
+      span {
+        text-wrap: balance;
+      }
+
+      .zoom-msg-content {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        justify-content: space-between;
+      }
     }
   
     .maplibregl-popup-content {
