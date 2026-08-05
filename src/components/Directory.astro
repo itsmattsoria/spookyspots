@@ -339,10 +339,14 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     item.addEventListener('mouseenter', () => {
       map.moveLayer(layerId);
       map.setPaintProperty(layerId, 'circle-radius', 15);
+      map.setPaintProperty(layerId, 'circle-stroke-width', 3);
+      map.setPaintProperty(layerId, 'circle-stroke-color', '#f5efe0');
     });
 
     item.addEventListener('mouseleave', () => {
       map.setPaintProperty(layerId, 'circle-radius', mapCircleRadius);
+      map.setPaintProperty(layerId, 'circle-stroke-width', 0);
+      map.setPaintProperty(layerId, 'circle-stroke-color', 'transparent');
     });
 
     item.addEventListener('click', (e) => {
@@ -359,7 +363,6 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       }
     });
   });
-
 
   // Filtering functionality
   const clearAllFilters = document.getElementById('clearAllFilters');
