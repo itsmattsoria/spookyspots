@@ -79,7 +79,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         <label for="search">Search</label>
         <div class="search-input-wrap">
           <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
-          <button id="clearBtn" class="clear-btn" aria-label="Clear search"><CloseIcon /></button>
+          <button id="clearBtn" class="clear-btn" aria-label="Clear search" tabindex="-1"><CloseIcon /></button>
         </div>
       </div>
       
@@ -386,8 +386,10 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       clearBtn.removeAttribute('hidden');
       clearBtn.style.opacity = '1';
       clearBtn.style.pointerEvents = 'auto';
+      clearBtn.removeAttribute('tabindex');
     } else {
       clearBtn.setAttribute('hidden', '');
+      clearBtn.setAttribute('tabindex', '-1');
     }
   }
 
@@ -633,7 +635,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       font-size: var(--step-0);
       color: var(--color-fg-primary); 
       border-radius: var(--space-3xs); 
-      transform: translate(-50%, -50%); 
+      transform: translate(-60%, -50%); 
       padding: var(--space-xs) var(--space-s); 
       background: color-mix(in srgb, var(--color-bg-primary) 70%, transparent); 
 
@@ -643,7 +645,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
       .zoom-msg-content {
         display: flex;
-        align-items: center;
+        align-items: start;
         gap: var(--space-xs);
         justify-content: space-between;
       }
@@ -656,6 +658,12 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       font-size: var(--step--2);
       font-family: var(--font-mono);
       color: var(--color-bg-primary);
+    }
+
+    .maplibregl-ctrl-group button {
+      outline: revert;
+      box-shadow: none;
+      outline-offset: 0.35rem;
     }
 
     @media screen and (min-width: 768px) {

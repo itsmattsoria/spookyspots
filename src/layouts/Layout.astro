@@ -17,9 +17,11 @@ const { pageTitle } = Astro.props;
 	</head>
 	<body>
 		<header class="site-header site-padding">
+			<a href="#main-content" class="skip-link">Skip to main content</a>
+
 			<div>
 				<h1 class="font-display site-title distortion-filter">Spoooky.biz</h1>
-				<div class="type-step-0">A directory of spooky & horror-themed businesses</div>
+				<div class="type-step-1">A directory of halloween, horror, otherwise spooky businesses.</div>
 			</div>
 			<nav aria-label="Primary">
 				<ul class="site-nav">
@@ -33,7 +35,9 @@ const { pageTitle } = Astro.props;
 			</nav>
 		</header>
 
-		<slot />
+		<main id="main-content" tabindex="-1">
+			<slot />
+		</main>
 
 		<footer class="site-footer site-padding">
 			<p>© {new Date().getFullYear()} Spooky Spots. A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
