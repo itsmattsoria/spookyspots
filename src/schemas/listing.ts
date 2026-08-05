@@ -4,6 +4,7 @@ const listingSchema = z.object({
   name: z.string(),
   description: z.string(),
   address: z.string(),
+  addressShort: z.string(),
   latLong: z.string(),
   website: z.string().optional(),
   instagram: z.string().optional(),

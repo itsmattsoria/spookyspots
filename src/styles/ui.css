@@ -1,6 +1,8 @@
 .tag {
   --tag-color: var(--color-fg-primary);
+  align-items: center;
   display: inline-flex;
+  gap: var(--space-3xs);
   padding: 0.125em 0.5em;
   font-size: var(--step--2);
   font-family: var(--font-mono);
@@ -8,7 +10,7 @@
   background-color: var(--tag-color);
   color: contrast-color(var(--tag-color));
 
-  &:has(svg) {
+  &.tag--square {
     padding: 0;
     aspect-ratio: 1 / 1;
 
@@ -19,10 +21,16 @@
       transition: transform 0.2s ease-in-out;
     }
   }
+
+  &.tag--lg {
+    padding: 0.5em;
+  }
 }
 
 button.tag,
 a.tag {
+  cursor: pointer;
+
   &:hover,
   &:focus-visible {
     background-color: color-mix(in srgb, var(--tag-color) 90%, #000);
@@ -30,6 +38,35 @@ a.tag {
 
   &:active {
     transform: scale(0.97);
+  }
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+button.link-button {
+  all: unset;
+  cursor: pointer;
+  font-size: inherit;
+  color: currentColor;
+  font-family: inherit;
+  text-decoration: none;
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 0.05em;
+
+  &:hover,
+  &:focus-visible {
+    font-style: italic;
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  svg {
+    width: 1em;
+    height: 1em;
+    vertical-align: baseline;
   }
 }
 

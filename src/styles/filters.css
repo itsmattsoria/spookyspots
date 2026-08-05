@@ -2,7 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: end;
-  gap: var(--space-xs);
+  gap: var(--space-3xs) var(--space-xs);
   justify-content: space-between;
   margin-block-start: var(--space-3xs);
 

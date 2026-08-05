@@ -4,6 +4,7 @@ import type { Listing } from '../schemas/listing';
 import { typeColors } from '../schemas/typeColors';
 import CloseIcon from '../assets/close.svg';
 import CaratIcon from '../assets/carat.svg';
+import PinIcon from '../assets/pin.svg';
 
 let directoryData = null;
 let errorMessage = null;
@@ -138,17 +139,20 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
               <div class="directory-list-item-header">
                 <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
                <div class="type-step--1">
-                <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <a href={item.mapUrl} target="_blank" class="location font-mono type-step--2">{item.address}</a>}
+                <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
                </div>
               </div>
               <div>
-                <div class="tag summary-icon">
+                <div class="tag tag--square summary-icon">
                   <CaratIcon />
                 </div>
               </div>
             </summary>
             <div class="directory-list-item-content">
               {item.description && <div>{item.description}</div>}
+              <div>
+                <a href={item.mapUrl} target="_blank" class="location font-mono">{item.address}<span class="external-icon">↗</span></a>
+              </div>
               {item.phone && <div>{item.phone}</div>}
               <div>
                 {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
@@ -178,6 +182,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   import 'multiple-select-vanilla/dist/styles/css/multiple-select.css';
   const mapInitialCenter: [number, number] = [0, 0];
   const mapInitialZoom = 1;
+  const mapCircleRadius = 7;
 
   setWorkerUrl(workerUrl);
 
@@ -245,7 +250,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
           'type': 'circle',
           'source': 'spookySpots',
           'paint': {
-            'circle-radius': 7,
+            'circle-radius': mapCircleRadius,
             'circle-color': ['get', 'color'],
           },
           // use filter to only show the features that match the search value
@@ -305,6 +310,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   // List.js functionality for search, sort, and filter
   const listingCount = document.getElementById('listing-count');
   const emptyState = document.getElementById('empty-state');
+  const directoryListItems = document.querySelectorAll('.directory-list-item');
   const directoryList = new List('directory-container', {
     valueNames: [
       'name', 
@@ -324,6 +330,42 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       emptyState.style.display = 'none';
     }
   });
+
+  directoryListItems?.forEach((item) => {
+    const layerId = item.getAttribute('data-id');
+
+    item.addEventListener('mouseenter', (e) => {
+      const target = e.target as HTMLElement;
+      const targetItem = target.closest('.directory-list-item');
+      if (item) {
+        map.moveLayer(layerId);
+        map.setPaintProperty(layerId, 'circle-radius', 15);
+      }
+    });
+
+    item.addEventListener('mouseleave', (e) => {
+      const target = e.target as HTMLElement;
+      const targetItem = target.closest('.directory-list-item');
+      if (item) {
+        map.setPaintProperty(layerId, 'circle-radius', mapCircleRadius);
+      }
+    });
+
+    item.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+
+      if (target.closest('.directory-list-item-map-link')) {
+        const feature = directoryData.find((feature) => feature.properties.id === layerId);
+        const bounds = new LngLatBounds();
+        bounds.extend(feature.geometry.coordinates);
+        map.fitBounds(bounds, {
+          padding: 100,
+          maxZoom: 10
+        });
+      }
+    });
+  });
+
 
   // Filtering functionality
   const clearAllFilters = document.getElementById('clearAllFilters');
