@@ -34,7 +34,6 @@
   select,
   .ms-choice {
     width: 100%;
-    line-height: 1;
     height: var(--space-l);
     font-size: var(--step--1);
     color: var(--color-bg-primary);
@@ -85,6 +84,11 @@
       select {
         padding-inline-end: 0;
         background-image: none;
+        text-transform: capitalize;
+
+        selectedcontent {
+          line-height: 1.45;
+        }
 
         &::picker-icon {
           width: var(--step-1);
@@ -108,17 +112,34 @@
         }
 
         option {
-          padding-block: var(--space-3xs);
+          padding: 0.35em 0.6em;
 
           &:hover,
           &:focus-visible {
             background-color: color-mix(currentcolor 10%, transparent);
           }
 
-          &::checkmark {
+          .option-icon {
             width: var(--step-1);
             height: var(--step-1);
-            content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM5 5V19H19V5H5ZM11.0026 16L6.75999 11.7574L8.17421 10.3431L11.0026 13.1716L16.6595 7.51472L18.0737 8.92893L11.0026 16Z'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM5 5V19H19V5H5Z'%3E%3C/path%3E%3C/svg%3E");
+          }
+
+          .option-label {
+            text-transform: capitalize;
+          }
+
+          &:checked {
+            .option-icon {
+              background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM5 5V19H19V5H5ZM11.0026 16L6.75999 11.7574L8.17421 10.3431L11.0026 13.1716L16.6595 7.51472L18.0737 8.92893L11.0026 16Z'%3E%3C/path%3E%3C/svg%3E");
+            }
+          }
+
+          &::checkmark {
+            display: none;
           }
         }
       }
@@ -198,7 +219,7 @@
   .ms-parent {
     --ms-icon-size: var(--step-1);
     --ms-chevron-icon-size: var(--step-1);
-    --ms-checkbox-icon-container-border: 1px solid var(--color-bg-primary);
+    --ms-checkbox-icon-container-border: none;
     --ms-checkbox-color: var(--color-bg-primary);
     --ms-checkbox-hover-color: var(--color-bg-primary);
     --ms-placeholder-color: color-mix(
@@ -258,12 +279,30 @@
   }
 
   .ms-drop ul > li label {
+    margin: 0;
     display: flex;
     align-items: center;
-    gap: var(--space-3xs);
+    padding: 0.35em 0.6em;
     font-size: var(--step--1);
     text-transform: capitalize;
-    margin: var(--space-3xs) 0;
+  }
+
+  .li:not(.hide-radio) .icon-checkbox-container,
+  .ms-drop li:not(.hide-radio) .icon-checkbox-container {
+    width: var(--step-1);
+    height: var(--step-1);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM5 5V19H19V5H5Z'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    .ms-icon-check {
+      display: none;
+    }
+
+    &:has(.ms-icon-check) {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M4 3H20C20.5523 3 21 3.44772 21 4V20C21 20.5523 20.5523 21 20 21H4C3.44772 21 3 20.5523 3 20V4C3 3.44772 3.44772 3 4 3ZM5 5V19H19V5H5ZM11.0026 16L6.75999 11.7574L8.17421 10.3431L11.0026 13.1716L16.6595 7.51472L18.0737 8.92893L11.0026 16Z'%3E%3C/path%3E%3C/svg%3E");
+    }
   }
 
   .ms-icon-caret {
