@@ -2,9 +2,9 @@
 
 ## Short-term
 
-- Style the type select input
+- ~Style the type select input~
 - Update URL with filters and "share" button
-- Add instructions on how to pinch to zoom on the map
+- ~Add instructions on how to pinch to zoom on the map~
 
 ## Long-term
 

@@ -90,11 +90,11 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
             <button>
               <selectedcontent></selectedcontent>
             </button>
-            <option value="">
+            <option value="" class="option-all">
               <span class="option-icon" aria-hidden="true"></span>
               <span class="option-label">All</span>
             </option>
-            {uniqueTypes.map((type) => <option value={type.name}><span class="option-icon" aria-hidden="true"></span><span class="option-label">{type.name} ({type.count})</span></option>)}
+            {uniqueTypes.map((type) => <option value={type.name} style={`--option-color: ${typeColors.find((color) => color.name.toLowerCase() === type.name.toLowerCase())?.color || '#f5efe0'};`}><span class="option-icon" aria-hidden="true"></span><span class="option-label">{type.name} ({type.count})</span></option>)}
           </select>
         </div>
       </div>

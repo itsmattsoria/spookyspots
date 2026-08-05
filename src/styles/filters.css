@@ -113,10 +113,25 @@
 
         option {
           padding: 0.35em 0.6em;
+          background-color: var(--option-color);
+          color: contrast-color(var(--option-color));
+          --option-color-hover: color-mix(
+            in srgb,
+            var(--option-color) 70%,
+            transparent
+          );
 
           &:hover,
           &:focus-visible {
-            background-color: color-mix(currentcolor 10%, transparent);
+            background-color: var(--option-color-hover);
+            color: contrast-color(var(--option-color-hover));
+          }
+
+          &.option-all {
+            &:hover,
+            &:focus-visible {
+              background-color: color-mix(currentcolor 10%, transparent);
+            }
           }
 
           .option-icon {
