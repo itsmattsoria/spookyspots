@@ -335,6 +335,12 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       { data: ['searchterms'] },
       { data: ['id'] }
     ],
+    fuzzySearch: {
+      location: 0,
+      distance: 200,
+      threshold: 0.7,
+      multiSearch: true
+    }
   });
 
   directoryList.on('updated', () => {
