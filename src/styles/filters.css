@@ -82,6 +82,7 @@
       }
 
       select {
+        cursor: pointer;
         padding-inline-end: 0;
         background-image: none;
         text-transform: capitalize;
@@ -112,13 +113,18 @@
         }
 
         option {
+          --option-color-light: color-mix(
+            in srgb,
+            var(--option-color) 90%,
+            #fff
+          );
           padding: 0.35em 0.6em;
-          background-color: var(--option-color);
+          background-color: var(--option-color-light);
           color: contrast-color(var(--option-color));
           --option-color-hover: color-mix(
             in srgb,
-            var(--option-color) 70%,
-            transparent
+            var(--option-color) 80%,
+            #000
           );
 
           &:hover,

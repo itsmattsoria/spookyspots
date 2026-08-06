@@ -74,7 +74,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
 <div id="directory-container" class="directory-container" data-directory-data={JSON.stringify(geoJsonData)}>
 
-  <div class="filters site-padding">
+  <div id="filters" class="filters site-padding">
     <div class="filters-wrapper">
       <div class="input-wrap">
         <label for="search">Search</label>
@@ -180,6 +180,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   import List from 'list.js';
   import { type MultipleSelectInstance, multipleSelect } from 'multiple-select-vanilla';
   import 'multiple-select-vanilla/dist/styles/css/multiple-select.css';
+  const directoryContainer = document.getElementById('directory-container');
   const mapInitialCenter: [number, number] = [0, 0];
   const mapInitialZoom = 1;
   const mapCircleRadius = 7;
@@ -504,6 +505,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       showClearAllFilters();
     }
 
+    directoryContainer?.scrollIntoView({ behavior: "smooth", block: "start" });
     recenterMap();
   }
 
