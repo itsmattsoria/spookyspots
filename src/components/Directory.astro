@@ -188,6 +188,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   const mapInitialCenter: [number, number] = [0, 0];
   const mapInitialZoom = 1;
   const mapCircleRadius = 7;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   setWorkerUrl(workerUrl);
 
@@ -381,8 +382,13 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         bounds.extend(feature.geometry.coordinates);
         map.fitBounds(bounds, {
           padding: 100,
-          maxZoom: 12
+          maxZoom: 12,
+          linear: prefersReducedMotion,
+          speed: prefersReducedMotion ? 0 : 1.2
         });
+        // close all open popups first
+        document.querySelectorAll('.maplibregl-popup-close-button').forEach(button => button.click());
+        // then show the popup
         showPopup(feature.geometry.coordinates, feature);
       }
     });
@@ -539,7 +545,9 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       });
       map.fitBounds(bounds, {
         padding: 100,
-        maxZoom: 12
+        maxZoom: 12,
+        linear: prefersReducedMotion,
+        speed: prefersReducedMotion ? 0 : 1.2
       });
     } else {
       // recenter map when all layers are visible
