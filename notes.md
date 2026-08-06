@@ -6,6 +6,8 @@
 - Update URL with filters and "share" button
 - ~Add instructions on how to pinch to zoom on the map~
 - Add ability to add a spot to a wishlist, but come up with a better name
+- Add "search in this area" button to the map, like google maps
+- Fix seach so full state names are included
 
 ## Long-term
 

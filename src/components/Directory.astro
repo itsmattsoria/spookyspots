@@ -27,7 +27,7 @@ const geoJsonData = directoryData?.map((item: Listing) => {
       coordinates: [Number(item.latLong.split(',')[1]), Number(item.latLong.split(',')[0])]
     },
     properties: {
-      id: item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags,
+      id: item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase(),
       name: item.name,
       type: item.type.toLowerCase(),
       description: item.description,
@@ -37,7 +37,8 @@ const geoJsonData = directoryData?.map((item: Listing) => {
       phone: item.phone,
       mapUrl: item.mapUrl,
       color: typeColors.find((type) => type.name === item.type)?.color || '#F78148',
-      tags: item.tags
+      tags: item.tags,
+      searchTerms: item.searchTerms.toLowerCase()
     }
   }
 });
@@ -133,7 +134,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   <div class="directory-list-wrapper">
     <ul id="directory-list" class="directory-list list" role="list">
       {sortedDirectoryData?.map((item: Listing) => (
-        <li class="directory-list-item" data-type={item.type.toLowerCase()} data-tags={item.tags} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags}>
+        <li class="directory-list-item" data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase()}>
           <details>
             <summary>
               <div class="directory-list-item-header">
@@ -152,7 +153,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
               {item.description && <div>{item.description}</div>}
               {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag">#{tag}</span>)}</div>}
               <div>
-                <a href={item.mapUrl} target="_blank" class="location font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
+                <a href={item.mapUrl} target="_blank" class="font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
               </div>
               <div class="font-mono type-step--2">
                 {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href="tel:${item.phone}">{item.phone}</a>}
@@ -242,7 +243,9 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       const type = feature.properties.type;
       const address = feature.properties.address;
       const tags = feature.properties.tags;
-      const layerID = feature.properties.name.toLowerCase() + ' ' + feature.properties.type.toLowerCase() + ' ' + feature.properties.address.toLowerCase() + ' ' + feature.properties.tags;
+      const searchTerms = feature.properties.searchTerms;
+      let layerID = feature.properties.name + ' ' + feature.properties.type + ' ' + feature.properties.address + ' ' + feature.properties.tags + ' ' + feature.properties.searchTerms;
+      layerID = layerID.toLowerCase().trim();
 
       // Add a layer for this symbol type if it hasn't been added already.
       if (!map.getLayer(layerID)) {
@@ -255,7 +258,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
             'circle-color': ['get', 'color'],
           },
           // use filter to only show the features that match the search value
-          'filter': ['all', ['==', ['get', 'name'], name], ['==', ['get', 'type'], type], ['==', ['get', 'address'], address], ['==', ['get', 'tags'], tags]]
+          'filter': ['all', ['==', ['get', 'name'], name], ['==', ['get', 'type'], type], ['==', ['get', 'address'], address], ['==', ['get', 'tags'], tags], ['==', ['get', 'searchTerms'], searchTerms]]
         });
 
         layerIDs.push(layerID);
@@ -271,12 +274,16 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         map.on('mouseenter', layerID, () => {
           map.getCanvas().style.cursor = 'pointer';
           map.setPaintProperty(layerID, 'circle-radius', 15);
+          map.setPaintProperty(layerID, 'circle-stroke-width', 3);
+          map.setPaintProperty(layerID, 'circle-stroke-color', '#f5efe0');
         });
 
         // 4. Optional: Reset the cursor when leaving the layer
         map.on('mouseleave', layerID, () => {
           map.getCanvas().style.cursor = '';
           map.setPaintProperty(layerID, 'circle-radius', mapCircleRadius);
+          map.setPaintProperty(layerID, 'circle-stroke-width', 0);
+          map.setPaintProperty(layerID, 'circle-stroke-color', 'transparent');
         });
       }
     });
@@ -321,10 +328,11 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   const directoryListItems = document.querySelectorAll('.directory-list-item');
   const directoryList = new List('directory-container', {
     valueNames: [
-      'name', 
-      'location', 
+      'name',
+      { data: ['location'] },
       { data: ['type'] },
       { data: ['tags'] },
+      { data: ['searchterms'] },
       { data: ['id'] }
     ],
   });
@@ -364,7 +372,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         bounds.extend(feature.geometry.coordinates);
         map.fitBounds(bounds, {
           padding: 100,
-          maxZoom: 10
+          maxZoom: 12
         });
         showPopup(feature.geometry.coordinates, feature);
       }
@@ -522,7 +530,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       });
       map.fitBounds(bounds, {
         padding: 100,
-        maxZoom: 10
+        maxZoom: 12
       });
     } else {
       // recenter map when all layers are visible

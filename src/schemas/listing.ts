@@ -13,6 +13,7 @@ const listingSchema = z.object({
   type: z.string(),
   tags: z.string().optional(),
   images: z.array(z.string()).optional(),
+  searchTerms: z.string().optional(),
   unlisted: z.boolean().default(false),
 });
 
