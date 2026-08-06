@@ -27,6 +27,12 @@
   }
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3xs);
+}
+
 button.tag,
 a.tag {
   cursor: pointer;

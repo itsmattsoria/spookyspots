@@ -5,6 +5,7 @@
 - ~Style the type select input~
 - Update URL with filters and "share" button
 - ~Add instructions on how to pinch to zoom on the map~
+- Add ability to add a spot to a wishlist, but come up with a better name
 
 ## Long-term
 
@@ -13,6 +14,7 @@
   - Businesses to feature:
     - The Brewed
     - The Witching Hour
+    - Terror (Reno)
 
 - Online biz
   - A separate directory of online businesses

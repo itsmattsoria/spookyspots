@@ -150,15 +150,15 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
             </summary>
             <div class="directory-list-item-content">
               {item.description && <div>{item.description}</div>}
+              {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag">#{tag}</span>)}</div>}
               <div>
-                <a href={item.mapUrl} target="_blank" class="location font-mono">{item.address}<span class="external-icon">↗</span></a>
+                <a href={item.mapUrl} target="_blank" class="location font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
               </div>
-              {item.phone && <div>{item.phone}</div>}
-              <div>
-                {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}
+              <div class="font-mono type-step--2">
+                {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href="tel:${item.phone}">{item.phone}</a>}
               </div>
               <div>
-                <a href={`mailto:matt.soria@hey.com?subject=Spooky Spots:Change Report for ${item.name}`} class="color-warning type-step--2">Report a change to this spot</a>
+                <a href={`mailto:hellospoookybiz@gmail.com?subject=Spooky Spots: Change Report for ${item.name} (${item.addressShort})`} class="color-warning type-step--2">Report a change to this spot</a>
               </div>
             </div>
           </details>
@@ -263,19 +263,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
           // Extract the coordinate where the user clicked
           const coordinates = e.lngLat;
 
-          const popupContent = `
-            <div class="font-sans type-step-0">${e.features[0].properties.name}</div>
-            <div><span class="tag" style="--tag-color: ${e.features[0].properties.color}">${e.features[0].properties.type}</span></div>
-            <div><a href="${e.features[0].properties.mapUrl}" target="_blank">${e.features[0].properties.address}<span class="external-icon">↗</span></a></div>
-            <div>${e.features[0].properties.phone}</div>
-            <div><a href="${e.features[0].properties.website}" target="_blank">Website</a> | <a href="${e.features[0].properties.instagram}" target="_blank">Instagram</a></div>
-          `;
-
-          // 2. Create and render the popup
-          new Popup()
-            .setLngLat(coordinates)
-            .setHTML(popupContent)
-            .addTo(map);
+          showPopup(coordinates, e.features[0]);
         });
 
         // 3. Optional: Change the cursor to a pointer when hovering over the layer
@@ -292,6 +280,23 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       }
     });
   });
+
+  // Show a layer popup
+  function showPopup(coordinates: string, feature: any) {
+    const popupContent = `
+      <div class="font-sans type-step-0">${feature.properties.name}</div>
+      <div><span class="tag" style="--tag-color: ${feature.properties.color}">${feature.properties.type}</span></div>
+      <div><a href="${feature.properties.mapUrl}" target="_blank">${feature.properties.address}<span class="external-icon">↗</span></a></div>
+      <div>${feature.properties.phone}</div>
+      <div><a href="${feature.properties.website}" target="_blank">Website</a> | <a href="${feature.properties.instagram}" target="_blank">Instagram</a></div>
+    `;
+
+    // 2. Create and render the popup
+    new Popup()
+      .setLngLat(coordinates)
+      .setHTML(popupContent)
+      .addTo(map);
+  }
 
   // Add geolocate control to the map.
   map.addControl(
@@ -360,6 +365,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
           padding: 100,
           maxZoom: 10
         });
+        showPopup(feature.geometry.coordinates, feature);
       }
     });
   });
