@@ -74,101 +74,104 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 ---
 
 <div id="directory-container" class="directory-container" data-directory-data={JSON.stringify(geoJsonData)}>
-
-  <div id="filters" class="filters site-padding">
-    <div class="filters-wrapper">
-      <div class="input-wrap">
-        <label for="search">Search</label>
-        <div class="search-input-wrap">
-          <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
-          <button id="clearBtn" class="clear-btn" aria-label="Clear search" tabindex="-1"><CloseIcon /></button>
+  <div class="directory-inner">
+    <div id="filters" class="filters site-padding">
+      <div class="filters-wrapper">
+        <div class="input-wrap">
+          <label for="search">Search</label>
+          <div class="search-input-wrap">
+            <input id="search" type="text" placeholder="Search by Name, Location, or Type" class="fuzzy-search search-input" />
+            <button id="clearBtn" class="clear-btn" aria-label="Clear search" tabindex="-1"><CloseIcon /></button>
+          </div>
         </div>
-      </div>
-      
-      <div class="input-wrap">
-        <label for="type-filter">Filter by type</label>
-        <div class="select-wrap">
-          <select id="type-filter">
-            <button>
-              <selectedcontent></selectedcontent>
-            </button>
-            <option value="" class="option-all">
-              <span class="option-icon" aria-hidden="true"></span>
-              <span class="option-label">All</span>
-            </option>
-            {uniqueTypes.map((type) => <option value={type.name} style={`--option-color: ${typeColors.find((color) => color.name.toLowerCase() === type.name.toLowerCase())?.color || '#f5efe0'};`}><span class="option-icon" aria-hidden="true"></span><span class="option-label">{type.name} ({type.count})</span></option>)}
+        
+        <div class="input-wrap">
+          <label for="type-filter">Filter by type</label>
+          <div class="select-wrap">
+            <select id="type-filter">
+              <button>
+                <selectedcontent></selectedcontent>
+              </button>
+              <option value="" class="option-all">
+                <span class="option-icon" aria-hidden="true"></span>
+                <span class="option-label">All</span>
+              </option>
+              {uniqueTypes.map((type) => <option value={type.name} style={`--option-color: ${typeColors.find((color) => color.name.toLowerCase() === type.name.toLowerCase())?.color || '#f5efe0'};`}><span class="option-icon" aria-hidden="true"></span><span class="option-label">{type.name} ({type.count})</span></option>)}
+            </select>
+          </div>
+        </div>
+  
+        <div class="input-wrap">
+          <label for="sort-by">Filter by tags</label>
+          <select multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
+            {uniqueTags.map((tag) => tag.name !== '' && <option value={tag.name}>{tag.name} ({tag.count})</option>)}
           </select>
         </div>
-      </div>
-
-      <div class="input-wrap">
-        <label for="sort-by">Filter by tags</label>
-        <select multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
-          {uniqueTags.map((tag) => tag.name !== '' && <option value={tag.name}>{tag.name} ({tag.count})</option>)}
-        </select>
-      </div>
-
-      <div>
-        <button id="clearAllFilters" class="clear-filters-btn hidden" aria-hidden="true">
-          <CloseIcon />
-          <span>Clear filters</span>
-        </button>
-      </div>
-    </div>
-    <div class="font-display type-step-0 distortion-filter"><span id="listing-count">{listingCount}</span> spooky spots</div>
-  </div>
-
-  <div class="map-container">
-    <div id="map">
-      <div id="zoom-msg" class="zoom-msg">
-        <div class="zoom-msg-content">
-          <span>Use ctrl + scroll, or "pinch" to zoom the map</span>
-          <button id="zoom-msg-dismiss" class="zoom-msg-dismiss tag" aria-label="Dismiss zoom message">
+  
+        <div>
+          <button id="clearAllFilters" class="clear-filters-btn hidden" aria-hidden="true">
             <CloseIcon />
+            <span>Clear filters</span>
           </button>
         </div>
       </div>
+      <div class="font-display type-step-0 distortion-filter"><span id="listing-count">{listingCount}</span> spooky spots</div>
     </div>
-  </div>
-
-  <div class="directory-list-wrapper">
-    <ul id="directory-list" class="directory-list list" role="list">
-      {sortedDirectoryData?.map((item: Listing) => (
-        <li class="directory-list-item" data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase()}>
-          <details>
-            <summary>
-              <div class="directory-list-item-header">
-                <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
-               <div class="type-step--1">
-                <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
-               </div>
-              </div>
-              <div>
-                <div class="tag tag--square summary-icon">
-                  <CaratIcon />
-                </div>
-              </div>
-            </summary>
-            <div class="directory-list-item-content">
-              {item.description && <div>{item.description}</div>}
-              {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag">#{tag}</span>)}</div>}
-              <div>
-                <a href={item.mapUrl} target="_blank" class="font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
-              </div>
-              <div class="font-mono type-step--2">
-                {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href="tel:${item.phone}">{item.phone}</a>}
-              </div>
-              <div>
-                <a href={`mailto:hellospoookybiz@gmail.com?subject=Spooky Spots: Change Report for ${item.name} (${item.addressShort})`} class="color-warning type-step--2">Report a change to this spot</a>
-              </div>
-            </div>
-          </details>
-        </li>
-      ))}
-    </ul>
   
-    <div id="empty-state" class="empty-state" style="display: none;">
-      <p><span class="font-display type-step-4 distortion-filter">Boo!</span><br> Sorry, but we didn't find any spooky spots that match your search. Try again with different filters.</p>
+    <div class="directory-bottom">
+      <div class="map-container">
+        <div id="map">
+          <div id="zoom-msg" class="zoom-msg">
+            <div class="zoom-msg-content">
+              <span>Use ctrl + scroll, or "pinch" to zoom the map</span>
+              <button id="zoom-msg-dismiss" class="zoom-msg-dismiss tag" aria-label="Dismiss zoom message">
+                <CloseIcon />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="directory-list-wrapper">
+        <ul id="directory-list" class="directory-list list" role="list">
+          {sortedDirectoryData?.map((item: Listing) => (
+            <li class="directory-list-item" data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase()}>
+              <details>
+                <summary>
+                  <div class="directory-list-item-header">
+                    <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
+                   <div class="type-step--1">
+                    <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
+                   </div>
+                  </div>
+                  <div>
+                    <div class="tag tag--square summary-icon">
+                      <CaratIcon />
+                    </div>
+                  </div>
+                </summary>
+                <div class="directory-list-item-content">
+                  {item.description && <div>{item.description}</div>}
+                  {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag">#{tag}</span>)}</div>}
+                  <div>
+                    <a href={item.mapUrl} target="_blank" class="font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
+                  </div>
+                  <div class="font-mono type-step--2">
+                    {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href="tel:${item.phone}">{item.phone}</a>}
+                  </div>
+                  <div>
+                    <a href={`mailto:hellospoookybiz@gmail.com?subject=Spooky Spots: Change Report for ${item.name} (${item.addressShort})`} class="color-warning type-step--2">Report a change to this spot</a>
+                  </div>
+                </div>
+              </details>
+            </li>
+          ))}
+        </ul>
+      
+        <div id="empty-state" class="empty-state" style="display: none;">
+          <p><span class="font-display type-step-4 distortion-filter">Boo!</span><br> Sorry, but we didn't find any spooky spots that match your search. Try again with different filters.</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -577,34 +580,70 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
 <style is:global>
   .directory-container {
-    display: grid;
+    @media screen and (min-width: 768px) {
+      height: 125vh;
+    }
+  }
+
+  .directory-inner {
     align-items: start;
     margin-block: var(--space-l);
 
     @media screen and (min-width: 768px) {
-      column-gap: var(--space-xs);
-      grid-template-columns: repeat(12, 1fr);
+      top: 0;
+      height: 100vh;
+      position: sticky;
     }
   }
 
   /* Filters */
   .filters {
-    top: 0;
+    /* top: 0; */
     z-index: 10;
     width: 100%;
-    position: sticky;
+    /* position: sticky; */
     grid-column: 1 / -1;
     padding-block: var(--space-s);
     background-color: var(--color-bg-primary);
   }
 
+  .directory-bottom {
+    display: grid;
+    align-items: start;
+
+    @media screen and (min-width: 768px) {
+      column-gap: var(--space-2xs);
+      grid-template-columns: repeat(12, 1fr);
+      height: calc(100vh - (var(--space-l) * 3));
+    }
+  }
+
   /* Directory List */
   .directory-list-wrapper {
     padding: var(--space-l) var(--space-xs-m) 0;
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+    &:-webkit-scrollbar-track {
+      background: var(--color-bg-primary);
+      border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-fg-primary);
+      border-radius: 10px;
+      border: 2px solid var(--color-bg-primary);
+    }
 
     @media screen and (min-width: 768px) {
+      overflow-y: auto;
+      /* position: sticky; */
       grid-column: 1 / 5;
+      height: 100%;
       padding: 0 0 0 var(--space-m);
+      /* height: calc(100vh - (var(--space-l) * 3)); */
+      /* top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs)); */
     }
   }
   .directory-list {
@@ -650,11 +689,11 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       .directory-list-item-content {
         display: flex;
         text-wrap: pretty;
-        gap: var(--space-2xs);
+        gap: var(--space-xs);
         flex-direction: column;
         font-size: var(--step--1);
         margin-top: var(--space-2xs);
-        padding-block-end: var(--space-s);
+        padding-block-end: var(--space-m);
       }
     }
   }
@@ -670,10 +709,11 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
     @media screen and (min-width: 768px) {
       order: 2;
-      position: sticky;
+      /* position: sticky; */
       grid-column: 5 / -1;
-      height: calc(100vh - (var(--space-l) * 3));
-      top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs));
+      height: 100%;
+      /* height: calc(100vh - (var(--space-l) * 3)); */
+      /* top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs)); */
     }
   }
 
