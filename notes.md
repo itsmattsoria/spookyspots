@@ -3,11 +3,13 @@
 ## Short-term
 
 - ~Style the type select input~
-- Update URL with filters and "share" button
 - ~Add instructions on how to pinch to zoom on the map~
+- ~Fix seach so full state names are included~
+- Update URL with filters and "share" button
 - Add ability to add a spot to a wishlist, but come up with a better name
 - Add "search in this area" button to the map, like google maps
-- ~Fix seach so full state names are included~
+- Add "don't remind me" button to the map scroll message, using localStorage
+- Add copy that reads "showcasing spooky spots from XX states, and XX countries"
 
 ## Long-term
 

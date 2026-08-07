@@ -16,7 +16,7 @@ const typeColors = [
     color: '#F66308',
   },
   {
-    name: 'Bookstore',
+    name: 'Record/Bookstore',
     color: '#DC2525',
   },
   {
