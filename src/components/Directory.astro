@@ -736,20 +736,21 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
     .zoom-msg {
       display: none;
-      top: 50%; 
-      left: 50%; 
       z-index: 999;
-      max-width: 280px;
+      width: max-content;
       position: absolute;
+      inset-block-start: 50%; 
+      inset-inline-start: 50%; 
       font-size: var(--step-0);
       color: var(--color-fg-primary); 
       border-radius: var(--space-3xs); 
-      transform: translate(-60%, -50%); 
+      transform: translate(-50%, -60%); 
       padding: var(--space-xs) var(--space-s); 
+      max-width: calc(100% - (var(--space-xs) * 2));
       background: color-mix(in srgb, var(--color-bg-primary) 70%, transparent); 
 
       span {
-        text-wrap: balance;
+        text-wrap: pretty;
       }
 
       .zoom-msg-content {

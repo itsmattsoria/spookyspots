@@ -13,12 +13,21 @@
 
   body {
     padding: 0;
+    position: relative;
     scrollbar-gutter: stable;
     font-family: var(--font-sans);
     color: var(--color-fg-primary);
     -moz-font-smoothing: antialiased;
     -webkit-font-smoothing: antialiased;
     background-color: var(--color-bg-primary);
+    &::before {
+      inset: 0;
+      content: '';
+      opacity: 0.3;
+      position: absolute;
+      pointer-events: none;
+      background-image: url('/images/texture.png');
+    }
   }
 
   ::selection {

@@ -20,8 +20,8 @@ const { pageTitle } = Astro.props;
 			<a href="#main-content" class="skip-link">Skip to main content</a>
 
 			<div>
-				<h1 class="font-display site-title distortion-filter">Spoooky.biz</h1>
-				<div class="type-step-1">A directory of halloween, horror, otherwise spooky businesses.</div>
+				<h1 class="font-display type-step-3 site-title distortion-filter">Spoooky.biz</h1>
+				<div class="type-step-0">A directory of halloween, horror, otherwise spooky businesses.</div>
 			</div>
 			<nav aria-label="Primary">
 				<ul class="site-nav">
@@ -29,7 +29,7 @@ const { pageTitle } = Astro.props;
 						<a href="#faq" class="button" style="--button-rotation: -4deg;"><span>FAQs</span></a>
 					</li>
 					<li>
-						<a href="https://forms.gle/doTGS7f46pdkyYHx5" target="_blank" class="button" style="--button-rotation: 3deg;"><span>Submit a spot!</span></a>
+						<a href="https://forms.gle/doTGS7f46pdkyYHx5" class="button" style="--button-rotation: 3deg;"><span>Submit a spot!</span></a>
 					</li>
 				</ul>
 			</nav>
@@ -97,14 +97,9 @@ const { pageTitle } = Astro.props;
 	}
 
 	.site-title {
-		font-size: 15vw;
 		line-height: 0.8;
 		text-transform: capitalize;
 		margin: 0 0 var(--space-xs);
-
-		@media screen and (min-width: 768px) {
-			font-size: 9vw;
-		}
 	}
 
 	.site-nav {
