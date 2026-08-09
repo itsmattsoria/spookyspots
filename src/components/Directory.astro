@@ -5,6 +5,7 @@ import { typeColors } from '../schemas/typeColors';
 import CloseIcon from '../assets/close.svg';
 import CaratIcon from '../assets/carat.svg';
 import PinIcon from '../assets/pin.svg';
+import StarIcon from '../assets/star.svg';
 
 let directoryData = null;
 let errorMessage = null;
@@ -152,12 +153,21 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                 </summary>
                 <div class="directory-list-item-content">
                   {item.description && <div>{item.description}</div>}
+                  <div>
+                    <button class="add-to-favorites tag">
+                      <span>
+                        <StarIcon />
+                      </span>
+                      <span>Add to favorites</span>
+                    </button>
+                  </div>
                   {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag">#{tag}</span>)}</div>}
                   <div>
                     <a href={item.mapUrl} target="_blank" class="font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
                   </div>
                   <div class="font-mono type-step--2">
-                    {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href="tel:${item.phone}">{item.phone}</a>}
+                    {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}
+                    {item.website && !item.instagram && item.phone && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href={'tel:' + item.phone}>{item.phone}</a>}
                   </div>
                   <div>
                     <a href={`mailto:hellospoookybiz@gmail.com?subject=Spooky Spots: Change Report for ${item.name} (${item.addressShort})`} class="color-warning type-step--2">Report a change to this spot</a>
@@ -583,6 +593,50 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   function hideClearAllFilters() {
     clearAllFilters?.classList.add('hidden');
     clearAllFilters?.setAttribute('aria-hidden', 'true');
+  }
+
+  /* Favorites functionality */
+  const directoryListElement = document.getElementById('directory-list');
+  const addToFavoritesButtons = document.querySelectorAll('.add-to-favorites');
+  addToFavoritesButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const item = button.closest('.directory-list-item');
+      const itemId = item.getAttribute('data-id');
+      addToFavorites(itemId);
+    });
+  });
+
+  let favorites: any[] = [];
+  function checkFavorites() {
+    if (localStorage.getItem('favorites') !== null) {
+      favorites = JSON.parse(localStorage.getItem('favorites'));
+
+      if (favorites) {
+        // move the favorites to the top of the list, and add 'favorite' class to the list items
+        favorites.forEach((favorite) => {
+          const item = document.querySelector(`[data-id="${favorite.id}"]`);
+          if (item) {
+            item.classList.add('favorite');
+          }
+
+          // remove the item from the list and move it to the top of the list
+          console.log(item);
+          directoryListElement?.prepend(item);
+        });
+      }
+    }
+  }
+  /* Check on page load */
+  checkFavorites();
+
+  function addToFavorites(item: any) {
+    favorites.push(item);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }
+
+  function removeFromFavorites(item: any) {
+    favorites = favorites.filter((favorite) => favorite.id !== item.id);
+    localStorage.setItem('favorites', JSON.stringify(favorites));
   }
 </script>
 
