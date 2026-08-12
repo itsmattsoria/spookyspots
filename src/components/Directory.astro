@@ -5,7 +5,8 @@ import { typeColors } from '../schemas/typeColors';
 import CloseIcon from '../assets/close.svg';
 import CaratIcon from '../assets/carat.svg';
 import PinIcon from '../assets/pin.svg';
-import StarIcon from '../assets/star.svg';
+import StarIcon from '../assets/star-full.svg';
+import StarRemoveIcon from '../assets/star-remove.svg';
 
 let directoryData = null;
 let errorMessage = null;
@@ -135,12 +136,18 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     
       <div class="directory-list-wrapper">
         <ul id="directory-list" class="directory-list list" role="list">
-          {sortedDirectoryData?.map((item: Listing) => (
-            <li class="directory-list-item" data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase()}>
+          {sortedDirectoryData?.map((item: Listing, index: number) => (
+            <li class="directory-list-item" data-index={index} data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase()}>
               <details>
                 <summary>
                   <div class="directory-list-item-header">
-                    <div class="type-step-1 name" style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</div>
+                    <div class="type-step-1 name">
+                      <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.name}</span>
+                      <div class="favorite-icon color-warning">
+                        <StarIcon />
+                        <span class="sr-only">User Favorite</span>
+                      </div>
+                    </div>
                    <div class="type-step--1">
                     <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
                    </div>
@@ -154,11 +161,18 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                 <div class="directory-list-item-content">
                   {item.description && <div>{item.description}</div>}
                   <div>
-                    <button class="add-to-favorites tag">
+                    <button class="add-to-favorites tag tag--lg bg-accent">
                       <span>
                         <StarIcon />
                       </span>
                       <span>Add to favorites</span>
+                    </button>
+
+                    <button class="remove-from-favorites tag tag--lg bg-accent" aria-hidden="true">
+                      <span>
+                        <StarRemoveIcon />
+                      </span>
+                      <span>Remove from favorites</span>
                     </button>
                   </div>
                   {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag">#{tag}</span>)}</div>}
@@ -343,6 +357,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   const directoryList = new List('directory-container', {
     valueNames: [
       'name',
+      'favorite',
       { data: ['location'] },
       { data: ['type'] },
       { data: ['tags'] },
@@ -494,12 +509,15 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     const flattenedFilterState = [
       filterState.search,
       filterState.type,
+      filterState.favorites,
       ...Object.values(filterState.facets).flat()
     ].join(' ').trim();
 
     if (flattenedFilterState === '') {
       directoryList.search();
       directoryList.filter();
+      // reorder the directory list for favorites
+      checkFavorites();
       layerIDs.forEach((layerID) => {
         map.setLayoutProperty(
           layerID,
@@ -598,11 +616,20 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   /* Favorites functionality */
   const directoryListElement = document.getElementById('directory-list');
   const addToFavoritesButtons = document.querySelectorAll('.add-to-favorites');
+  const removeFromFavoritesButtons = document.querySelectorAll('.remove-from-favorites');
   addToFavoritesButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const item = button.closest('.directory-list-item');
       const itemId = item.getAttribute('data-id');
       addToFavorites(itemId);
+    });
+  });
+
+  removeFromFavoritesButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const item = button.closest('.directory-list-item');
+      const itemId = item.getAttribute('data-id');
+      removeFromFavorites(itemId, item);
     });
   });
 
@@ -614,13 +641,14 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       if (favorites) {
         // move the favorites to the top of the list, and add 'favorite' class to the list items
         favorites.forEach((favorite) => {
-          const item = document.querySelector(`[data-id="${favorite.id}"]`);
+          const item = document.querySelector(`[data-id="${favorite}"]`);
           if (item) {
             item.classList.add('favorite');
+            item.querySelector('.add-to-favorites')?.setAttribute('aira-hidden', 'true');
+            item.querySelector('.remove-from-favorites')?.removeAttribute('aria-hidden');
           }
 
           // remove the item from the list and move it to the top of the list
-          console.log(item);
           directoryListElement?.prepend(item);
         });
       }
@@ -632,11 +660,18 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   function addToFavorites(item: any) {
     favorites.push(item);
     localStorage.setItem('favorites', JSON.stringify(favorites));
+    checkFavorites();
+    directoryListElement?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function removeFromFavorites(item: any) {
-    favorites = favorites.filter((favorite) => favorite.id !== item.id);
+  function removeFromFavorites(itemId: string, item: any) {
+    favorites = favorites.filter((favorite) => favorite !== itemId);
     localStorage.setItem('favorites', JSON.stringify(favorites));
+    item.classList.remove('favorite');
+    // put the item back in its original position in the directory list based on its data-index value
+    const index = item.getAttribute('data-index');
+    directoryListElement?.children[index].appendChild(item);
+    checkFavorites();
   }
 </script>
 
@@ -720,6 +755,27 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         border-bottom: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
       }
 
+      /* Favorites functionality */
+      .favorite-icon {
+        display: none;
+      }
+      .remove-from-favorites {
+        display: none;
+      }
+      &.favorite {
+        .favorite-icon {
+          display: inline-block;
+        }
+
+        .add-to-favorites {
+          display: none;
+        }
+
+        .remove-from-favorites {
+          display: inline-flex;
+        }
+      }
+
       details {
         &[open] {
           .summary-icon svg {
@@ -739,6 +795,12 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         &:hover,
         &:focus-visible {
           background-color: color-mix(in srgb, var(--color-fg-primary) 10%, transparent);
+        }
+
+        .favorite-icon {
+          width: 0.7em;
+          height: 0.7em;
+          margin-inline-start: var(--space-3xs);
         }
       }
 

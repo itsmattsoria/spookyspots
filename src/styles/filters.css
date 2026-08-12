@@ -163,6 +163,11 @@
             display: none;
           }
         }
+
+        /* Favorites Option */
+        option[value='favorites'] {
+          --option-color: var(--color-warning);
+        }
       }
     }
   }
