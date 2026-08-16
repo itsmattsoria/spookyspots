@@ -1,6 +1,6 @@
 const typeColors = [
   {
-    name: 'Coffee Shop',
+    name: 'Coffee Shops & Bakeries',
     color: '#289B2B',
   },
   {
@@ -16,7 +16,7 @@ const typeColors = [
     color: '#F66308',
   },
   {
-    name: 'Record/Bookstore',
+    name: 'Record & Bookstores',
     color: '#DC2525',
   },
   {
