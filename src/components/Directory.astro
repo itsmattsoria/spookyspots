@@ -350,6 +350,44 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     showCompass: true
   }));
 
+  // Add a custom button to allow user to expand map
+  class MapButtonControl {
+    onAdd(map) {
+      this._map = map;
+      this._container = document.createElement('div');
+      this._container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.title = 'Expand map';
+      button.className = 'maplibregl-ctrl-expand';
+      button.innerHTML = '<span class="maplibregl-ctrl-icon" aria-hidden="true"></span>';
+
+      button.onclick = () => {
+        toggleMapExpansion();
+      };
+
+      this._container.appendChild(button);
+      return this._container;
+    }
+
+    onRemove() {
+      this._container.remove();
+      this._map = undefined;
+    }
+  }
+
+  // Add the custom control to the map
+  map.addControl(new MapButtonControl(), 'top-left');
+
+  function toggleMapExpansion() {
+    if (directoryContainer?.classList.contains('map-full')) {
+      directoryContainer?.classList.remove('map-full');
+    } else {
+      directoryContainer?.classList.add('map-full');
+    }
+  }
+
   // List.js functionality for search, sort, and filter
   const listingCount = document.getElementById('listing-count');
   const emptyState = document.getElementById('empty-state');
@@ -680,6 +718,54 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     @media screen and (min-width: 768px) {
       height: 125vh;
     }
+
+    &.map-full {
+      height: auto;
+
+      .map-container,
+      .directory-list-wrapper {
+        grid-column: 1 / -1;
+      }
+
+      .directory-inner {
+        height: auto;
+        position: relative;
+      }
+
+      .directory-bottom {
+        height: auto;
+      }
+
+      .directory-list-wrapper {
+        max-height: 40vh;
+      }
+      
+      .map-wrapper {
+        order: 1;
+      }
+
+      .directory-list-wrapper {
+        order: 2;
+      }
+
+      .directory-list {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .map-container {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+      }
+
+      #map {
+        border-radius: 0;
+      }
+
+      #map .maplibregl-ctrl-expand .maplibregl-ctrl-icon {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M9.00008 4.00008H11.0001V11.0001H4.00008V9.00008H7.58586L3.29297 4.70718L4.70718 3.29297L9.00008 7.58586V4.00008ZM20 15H16.4142L20.7071 19.2929L19.2929 20.7071L15 16.4142V20H13V13H20V15Z'%3E%3C/path%3E%3C/svg%3E");
+      }
+    }
   }
 
   .directory-inner {
@@ -886,9 +972,19 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     }
 
     .maplibregl-ctrl-group button {
+      display: flex;
       outline: revert;
       box-shadow: none;
+      align-items: center;
+      justify-content: center;
       outline-offset: 0.35rem;
+    }
+
+    .maplibregl-ctrl-expand {
+      .maplibregl-ctrl-icon {
+        background-size: 70% 70%;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M6.41421 5H10V3H3V10H5V6.41421L9.29289 10.7071L10.7071 9.29289L6.41421 5ZM21 14H19V17.5858L14.7071 13.2929L13.2929 14.7071L17.5858 19H14V21H21V14Z'%3E%3C/path%3E%3C/svg%3E");
+      }
     }
 
     @media screen and (min-width: 768px) {
