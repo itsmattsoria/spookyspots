@@ -1,28 +1,112 @@
 ---
-import { CldImage } from 'astro-cloudinary';
+const respSizes = [300, 600, 900, 1050, 1200, 1500, 2200];
+let cloudiBase = "https://res.cloudinary.com/dblidlnrc/image/upload/";
+let LQIPholder = "f_jpg,q_50,w_600,e_blur:2000/";
+// --- note ending slash and that `q` must have a leading zero
+let xFmPart1 = "f_auto,q_auto:eco,w_";
+let xFmPart2 = ",x_0,z_1/"; // note ending slash
 
-const { url, alt, width, height, zoomable, focalPoint, containerClasses, imgClasses } = Astro.props;
-const additionalContainerClasses = containerClasses ? containerClasses : "";
-const additionalImgClasses = imgClasses ? imgClasses : "";
-let objectPosition = "center";
-if (focalPoint) {
- objectPosition = `${focalPoint[0] * 100}% ${focalPoint[1] * 100}%`;
+interface Props {
+  url: string;
+  alt: string;
+  width: number;
+  height: number;
+  zoomable?: boolean;
+  caption?: string;
+  lightbox?: string;
+  focalPoint?: [number, number];
+  effects?: string;
+  containerClasses?: string;
+  imgClasses?: string;
 }
 
-let divClass, imgClass, nscClass, dataSzes;
+const {
+  url,
+  alt,
+  width,
+  height,
+  focalPoint,
+  effects,
+  containerClasses,
+  imgClasses,
+} = Astro.props;
 
-divClass = `image-wrapper ${additionalContainerClasses}`;
+const effectsString = effects ? effects : "";
+const additionalContainerClasses = containerClasses ? containerClasses : "";
+const additionalImgClasses = imgClasses ? imgClasses : "";
+const formattedUrl = url.replace(cloudiBase, "");
+let objectPosition = "center";
+if (focalPoint) {
+  objectPosition = `${focalPoint[0] * 100}% ${focalPoint[1] * 100}%`;
+}
+
+if (effectsString) {
+  LQIPholder = LQIPholder + effectsString + "/";
+}
+
+const Srcset = respSizes
+  .filter((size) => size <= width)
+  .map(
+    (size) =>
+      `${cloudiBase + xFmPart1 + size + xFmPart2 + effectsString + formattedUrl} ${size}w`
+  )
+  .join(", ");
+
+// The default/fallback source used for the `src` attribute
+const defaultSrc = cloudiBase + xFmPart1 + "800" + xFmPart2 + formattedUrl;
+
+let divClass, imgClass, dataSzes;
+
+divClass = `img-container bkgdHandler ${additionalContainerClasses}`;
 dataSzes = `(min-width: 768px) 100vw, 50vw`;
-nscClass = `nsc-image`;
-imgClass = `image animate-fade lazyload ${additionalImgClasses}`;
+imgClass = `w-full h-full rounded-md animate-fade m-0 ${additionalImgClasses}`;
+
+/*
+================================================================
+Fetch the LQIP from Cloudinary and convert it to a Base64 string
+================================================================
+With immense thanks to "Aankhen" on the Eleventy Discord, 2022-01-22:
+- https://discord.com/channels/741017160297611315/934524410591838249/
+Also, https://stackoverflow.com/questions/41846669/download-an-image-using-axios-and-convert-it-to-base64
+*/
+
+async function getBase64(urlFor64: string) {
+  const response = await fetch(urlFor64);
+  const arrayBuffer = await response.arrayBuffer();
+  return Buffer.from(arrayBuffer).toString("base64");
+}
+
+let LQIP_b64 = await getBase64(cloudiBase + LQIPholder + formattedUrl);
+let imgBkgd = `url(data:image/jpeg;base64,${LQIP_b64})`;
+
+/*
+================================================================
+End, LQIP-to-Base64
+================================================================
+*/
 ---
 
-<style define:vars={{ objectPosition }}>
-  .image-wrapper {
+<style define:vars={{ imgBkgd, objectPosition }}>
+  .img-container {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    object-fit: cover;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--space-3xs);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .bkgdHandler {
+    background-color: #ffffff;
+    background-image: var(--imgBkgd);
+    background-repeat: no-repeat;
+    background-position: var(--objectPosition);
+    background-size: cover;
   }
 
   @keyframes fadeIn {
@@ -37,26 +121,17 @@ imgClass = `image animate-fade lazyload ${additionalImgClasses}`;
   .animate-fade {
     animation: fadeIn 750ms ease-in-out;
   }
-
-  .nsc-image,
-  .image {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
-  }
 </style>
 
-<div class={divClass} data-pagefind-ignore>
-  <CldImage
-    src={url}
+<div class={divClass}>
+  <img
+    class={imgClass}
+    ata-splide-lazy={defaultSrc}
+    data-splide-lazy-srcset={Srcset}
+    alt={alt}
     width={width}
     height={height}
     sizes={dataSzes}
-    alt={alt ?? ''}
-    data-zoomable={zoomable}
-    data-pagefind-ignore
-    class={imgClass}
-    style={'object-position: ' + objectPosition}
+    style={`object-position: ${objectPosition};`}
   />
 </div>

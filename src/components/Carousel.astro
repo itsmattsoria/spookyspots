@@ -1,5 +1,5 @@
 ---
-import { CldImage } from 'astro-cloudinary';
+import CloudImage from './CloudImage.astro';
 
 const { photos, item } = Astro.props;
 ---
@@ -9,14 +9,11 @@ const { photos, item } = Astro.props;
 		<ul class="splide__list">
       {photos.map((photo) => (
         <li class="splide__slide">
-          <CldImage
-            src={photo}
-            width={400}
-            height={300}
-            crop="fill"
-            gravity="auto"
+          <CloudImage
+            url={photo}
+            width={1200}
+            height={900}
             alt={`${item.name} photo`}
-            loading="lazy"
           />
         </li>
       ))}
@@ -29,6 +26,7 @@ const { photos, item } = Astro.props;
     width: 100%;
     overflow: clip;
     aspect-ratio: 4 / 3;
+    content-visibility: auto;
     border-radius: var(--space-3xs);
     background-color: color-mix(in srgb, var(--color-fg-primary) 30%, transparent);
   }

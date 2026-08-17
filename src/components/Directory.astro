@@ -482,13 +482,6 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         // then show the popup
         showPopup(feature.geometry.coordinates, feature);
       }
-
-      if (target.closest('summary')) {
-        const featurePhotos = item.querySelectorAll<HTMLDivElement>('img');
-        featurePhotos?.forEach((photo) => {
-          photo.removeAttribute('loading');
-        });
-      }
     });
   });
 

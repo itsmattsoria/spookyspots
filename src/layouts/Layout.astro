@@ -129,12 +129,38 @@ const { pageTitle } = Astro.props;
 	const carousels = document.querySelectorAll('.carousel');
 
 	carousels.forEach(carousel => {
-		new Splide(carousel, {
-			type: 'loop',
-			perPage: 1,
-			perMove: 1,
-			pagination: true,
-			arrows: true,
-		}).mount();
+		// Find the closest parent <details> element
+		const details = carousel.closest('details');
+
+		const mountCarousel = () => {
+				// Guard: only mount once
+				if (carousel.dataset.splideMounted) return;
+				carousel.dataset.splideMounted = 'true';
+
+				new Splide(carousel, {
+						type: 'slide',
+						perPage: 1,
+						perMove: 1,
+						pagination: true,
+						arrows: true,
+						lazyLoad: 'nearby',
+						preloadPages: 3,
+				}).mount();
+		};
+
+		if (details) {
+			// If it's already open on load, mount immediately
+			if (details.open) {
+				mountCarousel();
+			} else {
+				// Mount the first time the details is expanded
+				details.addEventListener('toggle', () => {
+					if (details.open) mountCarousel();
+				});
+			}
+		} else {
+			// No parent <details>? Fall back to mounting normally.
+			mountCarousel();
+		}
 	});
 </script>
