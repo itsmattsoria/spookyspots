@@ -1,6 +1,11 @@
 :root {
   /* Colors */
   --color-fg-primary: #f5efe0;
+  --color-fg-secondary: color-mix(
+    in srgb,
+    var(--color-fg-primary) 20%,
+    transparent
+  );
   --color-bg-primary: #111;
   --color-accent: #f66308;
   --color-warning: #fdc456;

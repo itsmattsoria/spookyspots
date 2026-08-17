@@ -22,6 +22,11 @@
     }
   }
 
+  &.tag--secondary {
+    color: var(--color-fg-primary);
+    background-color: var(--color-fg-secondary);
+  }
+
   &.tag--lg {
     padding: 0.5em;
   }

@@ -3,7 +3,7 @@ import CloudImage from './CloudImage.astro';
 
 const { photos, item } = Astro.props;
 ---
-<div class="splide carousel" role="group" aria-label="Splide Basic HTML Example">
+<div class="splide carousel" role="group" aria-label={`${item.name} photos.`}>
   <div class="loader"><span class="loader-wrapper">🎃 🎃 🎃</span></div>
   <div class="splide__track">
 		<ul class="splide__list">

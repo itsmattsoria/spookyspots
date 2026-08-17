@@ -89,4 +89,15 @@
   svg {
     transition: fill 0.2s ease-out;
   }
+
+  .icon {
+    display: inline-block;
+    vertical-align: middle;
+
+    svg {
+      width: 1em;
+      height: 1em;
+      fill: currentColor;
+    }
+  }
 }

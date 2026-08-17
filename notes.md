@@ -2,14 +2,16 @@
 
 ## Short-term
 
+- Mobile filter experience
 - ~Style the type select input~
 - ~Add instructions on how to pinch to zoom on the map~
 - ~Fix seach so full state names are included~
 - Update URL with filters and "share" button
-- Add ability to add a spot to a wishlist, but come up with a better name
+- ~Add ability to add a spot to a wishlist, but come up with a better name~
 - Add "search in this area" button to the map, like google maps
 - Add "don't remind me" button to the map scroll message, using localStorage
 - Add copy that reads "showcasing spooky spots from XX states, and XX countries"
+- About Page
 
 ## Long-term
 
@@ -19,6 +21,9 @@
     - The Brewed
     - The Witching Hour
     - Terror (Reno)
+  - Questions to ask:
+    - When did you first open up your spooky business, and whats the origin story?
+    - What's
 
 - Online biz
   - A separate directory of online businesses

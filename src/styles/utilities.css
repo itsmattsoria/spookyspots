@@ -11,6 +11,9 @@
 .color-fg-primary {
   color: var(--color-fg-primary);
 }
+.color-fg-secondary {
+  color: var(--color-fg-secondary);
+}
 .color-bg-primary {
   color: var(--color-bg-primary);
 }
