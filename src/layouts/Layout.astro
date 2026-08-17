@@ -121,3 +121,20 @@ const { pageTitle } = Astro.props;
 		margin-block-start: var(--space-3xl);
 	}
 </style>
+
+<script>
+	import { Splide } from '@splidejs/splide';
+	import '@splidejs/splide/css';
+
+	const carousels = document.querySelectorAll('.carousel');
+
+	carousels.forEach(carousel => {
+		new Splide(carousel, {
+			type: 'loop',
+			perPage: 1,
+			perMove: 1,
+			pagination: true,
+			arrows: true,
+		}).mount();
+	});
+</script>

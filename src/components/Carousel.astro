@@ -1,0 +1,49 @@
+---
+import { CldImage } from 'astro-cloudinary';
+
+const { photos, item } = Astro.props;
+---
+<div class="splide carousel" role="group" aria-label="Splide Basic HTML Example">
+  <div class="loader"><span class="loader-wrapper">🎃 🎃 🎃</span></div>
+  <div class="splide__track">
+		<ul class="splide__list">
+      {photos.map((photo) => (
+        <li class="splide__slide">
+          <CldImage
+            src={photo}
+            width={400}
+            height={300}
+            crop="fill"
+            gravity="auto"
+            alt={`${item.name} photo`}
+            loading="lazy"
+          />
+        </li>
+      ))}
+		</ul>
+  </div>
+</div>
+
+<style>
+  .carousel {
+    width: 100%;
+    overflow: clip;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--space-3xs);
+    background-color: color-mix(in srgb, var(--color-fg-primary) 30%, transparent);
+  }
+  .loader {
+    font-size: 2rem;
+    position: absolute;
+    display: inline-block;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .loader-wrapper {
+    aspect-ratio: 4;
+    clip-path: inset(0 100% 0 0);
+    animation: l1 1s steps(4) infinite;
+  }
+  @keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
+</style>

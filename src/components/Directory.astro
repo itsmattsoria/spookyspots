@@ -2,6 +2,7 @@
 import { fetchListings } from '../scripts/fetch-listings';
 import type { Listing } from '../schemas/listing';
 import { typeColors } from '../schemas/typeColors';
+import Carousel from './Carousel.astro';
 import CloseIcon from '../assets/close.svg';
 import CaratIcon from '../assets/carat.svg';
 import PinIcon from '../assets/pin.svg';
@@ -40,6 +41,7 @@ const geoJsonData = directoryData?.map((item: Listing) => {
       mapUrl: item.mapUrl,
       color: typeColors.find((type) => type.name === item.type)?.color || '#F78148',
       tags: item.tags,
+      rating: item.rating,
       searchTerms: item.searchTerms.toLowerCase()
     }
   }
@@ -67,6 +69,9 @@ directoryData?.forEach((item: Listing) => {
       uniqueTags.push({ name: tagItem, count: 1 });
     }
   });
+
+  // Get the photos and add them to item.photos[]
+  item.photos = [item.photo1, item.photo2, item.photo3].filter(Boolean);
 });
 uniqueTypes.sort((a, b) => b.count - a.count);
 uniqueTags.sort((a, b) => a.name.localeCompare(b.name));
@@ -159,7 +164,13 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                   </div>
                 </summary>
                 <div class="directory-list-item-content">
+                  {item.rating && (
+                    <p>⭐ {item.rating.toFixed(1)}
+                      {item.userRatingCount && <span> ({item.userRatingCount.toLocaleString('en-US')} reviews)</span>}
+                    </p>
+                  )}
                   {item.description && <div>{item.description}</div>}
+                  {item.photos && <div class="photos"><Carousel photos={item.photos} item={item} /></div>}
                   <div>
                     <button class="add-to-favorites tag tag--lg bg-accent">
                       <span>
@@ -334,6 +345,23 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       .addTo(map);
   }
 
+  // Create a listener for each of the popup info links
+  // <button class="tag" data-popup-info-link data-popup-info-link-feature="${feature.properties.id}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 11V17H13V11H11ZM11 7V9H13V7H11Z"></path></svg><span>More info</span></button>
+  // const popupInfoLinks = document.querySelectorAll<HTMLButtonElement>('[data-popup-info-link]');
+  // popupInfoLinks.forEach((link) => {
+  //   link.addEventListener('click', (e) => {
+  //     e.preventDefault();
+  //     console.log('popup info link clicked');
+  //     const target = e.target as HTMLButtonElement;
+  //     const feature = target.dataset.popupInfoLinkFeature;
+  //     const featureElement = document.querySelector<HTMLElement>(`[data-id="${feature}"]`);
+  //     // scroll to the feature element
+  //     featureElement?.scrollIntoView({ behavior: "smooth", block: "start" });
+  //     const fetureElementSummary = featureElement?.querySelector<HTMLElement>('summary');
+  //     fetureElementSummary?.click();
+  //   });
+  // });
+  
   // Add geolocate control to the map.
   map.addControl(
     new GeolocateControl({
@@ -453,6 +481,13 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         document.querySelectorAll('.maplibregl-popup-close-button').forEach(button => button.click());
         // then show the popup
         showPopup(feature.geometry.coordinates, feature);
+      }
+
+      if (target.closest('summary')) {
+        const featurePhotos = item.querySelectorAll<HTMLDivElement>('img');
+        featurePhotos?.forEach((photo) => {
+          photo.removeAttribute('loading');
+        });
       }
     });
   });
@@ -903,6 +938,11 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         font-size: var(--step--1);
         margin-top: var(--space-2xs);
         padding-block-end: var(--space-m);
+      }
+
+      .photos {
+        display: flex;
+        
       }
     }
   }

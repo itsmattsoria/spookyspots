@@ -12,7 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.1.5",
+    "@splidejs/splide": "^4.1.4",
+    "astro": "^7.2.2",
+    "astro-cloudinary": "^1.4.0",
     "list.js": "^2.3.1",
     "maplibre-gl": "^6.0.0",
     "multiple-select-vanilla": "^5.2.1"
