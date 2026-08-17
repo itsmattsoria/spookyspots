@@ -42,6 +42,7 @@ const geoJsonData = directoryData?.map((item: Listing) => {
       color: typeColors.find((type) => type.name === item.type)?.color || '#F78148',
       tags: item.tags,
       rating: item.rating,
+      userRatingCount: item.userRatingCount,
       searchTerms: item.searchTerms.toLowerCase()
     }
   }
@@ -153,18 +154,16 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                         <span class="sr-only">User Favorite</span>
                       </div>
                     </div>
-                    
-                    <div class="type-step--1">
-                      <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
-                    </div>
-
-                    {item.rating && (
-                      <div>
-                        <p class="type-step--1"><span class="color-warning icon"><StarIcon /></span> <span>{item.rating.toFixed(1)}</span>
-                          {item.userRatingCount && <span> ({item.userRatingCount.toLocaleString('en-US')} reviews)</span>}
-                        </p>
-                      </div>
-                    )}
+                   <div class="type-step--1">
+                    <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
+                   </div>
+                   {item.rating && (
+                     <div>
+                       <p class="type-step--1"><span class="color-warning icon"><StarIcon /></span> <span>{item.rating.toFixed(1)}</span>
+                         {item.userRatingCount && <span> ({item.userRatingCount.toLocaleString('en-US')} reviews)</span>}
+                       </p>
+                     </div>
+                   )}
                   </div>
                   <div>
                     <div class="tag tag--square summary-icon">
@@ -337,9 +336,21 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     const popupContent = `
       <div class="font-sans type-step-0">${feature.properties.name}</div>
       <div><span class="tag" style="--tag-color: ${feature.properties.color}">${feature.properties.type}</span></div>
+      <div>
+        ${feature.properties.rating != null
+          ? `<span class="color-warning icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.0006 18.26L4.94715 22.2082L6.52248 14.2799L0.587891 8.7918L8.61493 7.84006L12.0006 0.5L15.3862 7.84006L23.4132 8.7918L17.4787 14.2799L19.054 22.2082L12.0006 18.26Z"></path></svg></span>
+              <span>${feature.properties.rating.toFixed(1)}</span>`
+          : ''}
+        ${feature.properties.userRatingCount != null
+          ? `<span> (${feature.properties.userRatingCount.toLocaleString('en-US')} reviews)</span>`
+          : ''}
+      </div>
       <div><a href="${feature.properties.mapUrl}" target="_blank">${feature.properties.address}<span class="external-icon">↗</span></a></div>
       <div>${feature.properties.phone}</div>
       <div><a href="${feature.properties.website}" target="_blank">Website</a> | <a href="${feature.properties.instagram}" target="_blank">Instagram</a></div>
+      <div>
+        <button class="tag" data-popup-info-link data-popup-info-link-feature="${feature.properties.id}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 11V17H13V11H11ZM11 7V9H13V7H11Z"></path></svg><span>More info</span></button>
+      </div>
     `;
 
     // 2. Create and render the popup
@@ -350,21 +361,36 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   }
 
   // Create a listener for each of the popup info links
-  // <button class="tag" data-popup-info-link data-popup-info-link-feature="${feature.properties.id}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 11V17H13V11H11ZM11 7V9H13V7H11Z"></path></svg><span>More info</span></button>
-  // const popupInfoLinks = document.querySelectorAll<HTMLButtonElement>('[data-popup-info-link]');
-  // popupInfoLinks.forEach((link) => {
-  //   link.addEventListener('click', (e) => {
-  //     e.preventDefault();
-  //     console.log('popup info link clicked');
-  //     const target = e.target as HTMLButtonElement;
-  //     const feature = target.dataset.popupInfoLinkFeature;
-  //     const featureElement = document.querySelector<HTMLElement>(`[data-id="${feature}"]`);
-  //     // scroll to the feature element
-  //     featureElement?.scrollIntoView({ behavior: "smooth", block: "start" });
-  //     const fetureElementSummary = featureElement?.querySelector<HTMLElement>('summary');
-  //     fetureElementSummary?.click();
-  //   });
-  // });
+  const popupInfoLinks = document.querySelectorAll<HTMLButtonElement>('[data-popup-info-link]');
+  popupInfoLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      console.log('popup info link clicked');
+      const target = e.target as HTMLButtonElement;
+      const feature = target.dataset.popupInfoLinkFeature;
+      const featureElement = document.querySelector<HTMLElement>(`[data-id="${feature}"]`);
+      // scroll to the feature element
+      featureElement?.scrollIntoView({ behavior: "smooth", block: "start" });
+      const fetureElementSummary = featureElement?.querySelector<HTMLElement>('summary');
+      fetureElementSummary?.click();
+    });
+  });
+
+  const mapContainer = document.querySelector<HTMLElement>('.map-container');
+
+  mapContainer?.addEventListener('click', (e) => {
+    const link = (e.target as HTMLElement).closest<HTMLButtonElement>(
+      '[data-popup-info-link]'
+    );
+    if (!link || !mapContainer.contains(link)) return;
+
+    const feature = link.dataset.popupInfoLinkFeature;
+    const featureElement = document.querySelector<HTMLElement>(`[data-id="${feature}"]`);
+    // scroll to the feature element
+    featureElement?.scrollIntoView({ block: "start" });
+    const fetureElementSummary = featureElement?.querySelector<HTMLElement>('summary');
+    fetureElementSummary?.click();
+  });
   
   // Add geolocate control to the map.
   map.addControl(
