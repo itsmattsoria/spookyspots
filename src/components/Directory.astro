@@ -21,6 +21,14 @@ try  {
 
 const listingCount = directoryData?.length;
 
+// Helper to normalize the id for each item
+const makeId = (item: Listing) =>
+[item.name, item.type, item.address, item.tags, item.searchTerms]
+  .map(v => (v ?? '').toLowerCase())
+  .join(' ')
+  .replace(/\s+/g, ' ')// collapse any accidental double spaces
+  .trim();
+
 // make a copy of directoryData and reformat it to be a GeoJSON object
 const geoJsonData = directoryData?.map((item: Listing) => {
   return {
@@ -30,7 +38,7 @@ const geoJsonData = directoryData?.map((item: Listing) => {
       coordinates: [Number(item.latLong.split(',')[1]), Number(item.latLong.split(',')[0])]
     },
     properties: {
-      id: item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase(),
+      id: makeId(item),
       name: item.name,
       type: item.type.toLowerCase(),
       description: item.description,
@@ -143,7 +151,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       <div class="directory-list-wrapper">
         <ul id="directory-list" class="directory-list list" role="list">
           {sortedDirectoryData?.map((item: Listing, index: number) => (
-            <li class="directory-list-item" data-index={index} data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={item.name.toLowerCase() + ' ' + item.type.toLowerCase() + ' ' + item.address.toLowerCase() + ' ' + item.tags.toLowerCase() + ' ' + item.searchTerms.toLowerCase()}>
+            <li class="directory-list-item" data-index={index} data-type={item.type.toLowerCase()} data-location={item.address.toLowerCase()} data-tags={item.tags} data-searchterms={item.searchTerms?.toLowerCase()} data-id={makeId(item)}>
               <details>
                 <summary>
                   <div class="directory-list-item-header">
@@ -286,8 +294,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       const address = feature.properties.address;
       const tags = feature.properties.tags;
       const searchTerms = feature.properties.searchTerms;
-      let layerID = feature.properties.name + ' ' + feature.properties.type + ' ' + feature.properties.address + ' ' + feature.properties.tags + ' ' + feature.properties.searchTerms;
-      layerID = layerID.toLowerCase().trim();
+      const layerID = feature.properties.id;
 
       // Add a layer for this symbol type if it hasn't been added already.
       if (!map.getLayer(layerID)) {
@@ -482,6 +489,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     const layerId = item.getAttribute('data-id');
 
     item.addEventListener('mouseenter', () => {
+      if (!map.getLayer(layerId)) return;
       map.moveLayer(layerId);
       map.setPaintProperty(layerId, 'circle-radius', 15);
       map.setPaintProperty(layerId, 'circle-stroke-width', 3);
@@ -489,6 +497,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     });
 
     item.addEventListener('mouseleave', () => {
+      if (!map.getLayer(layerId)) return;
       map.setPaintProperty(layerId, 'circle-radius', mapCircleRadius);
       map.setPaintProperty(layerId, 'circle-stroke-width', 0);
       map.setPaintProperty(layerId, 'circle-stroke-color', 'transparent');
@@ -989,6 +998,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   }
 
   .empty-state {
+    padding-inline: var(--space-xs);
     padding-block-start: var(--space-l);
   }
 
