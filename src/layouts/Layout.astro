@@ -39,6 +39,8 @@ const { pageTitle } = Astro.props;
 		</main>
 
 		<footer class="site-footer site-padding">
+			<p class="type-step-1 font-display distortion-filter">Support your local spooky business!</p>
+			<p class="type-step--2">Qustions, feedback, or bug reports: <a href="mailto:hellospoookybiz@gmail.com">hellospoookybiz@gmail.com</a></p>
 			<p class="type-step--2">© {new Date().getFullYear()} Spoooky.biz 🎃 A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
 		</footer>
 
@@ -126,7 +128,12 @@ const { pageTitle } = Astro.props;
 
 	/* Footer */
 	.site-footer {
+		display: flex;
 		text-align: center;
+		gap: var(--space-s);
+		flex-direction: column;
+		justify-content: center;
+		padding-block-end: var(--space-l);
 		margin-block-start: var(--space-3xl);
 	}
 </style>

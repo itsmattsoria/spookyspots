@@ -341,7 +341,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   // Show a layer popup
   function showPopup(coordinates: string, feature: any) {
     const popupContent = `
-      <div class="font-sans type-step-0">${feature.properties.name}</div>
+      <div class="popup-title font-sans type-step-0">${feature.properties.name}</div>
       <div><span class="tag" style="--tag-color: ${feature.properties.color}">${feature.properties.type}</span></div>
       <div>
         ${feature.properties.rating != null
@@ -1058,6 +1058,10 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       font-size: var(--step--2);
       font-family: var(--font-mono);
       color: var(--color-bg-primary);
+
+      .popup-title {
+        padding-inline-end: calc(var(--space-2xs) + 24px);
+      }
     }
 
     .maplibregl-popup-close-button {
