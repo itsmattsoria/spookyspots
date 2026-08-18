@@ -1,10 +1,22 @@
 ---
 import CloudImage from './CloudImage.astro';
+import ArrowRight from '../assets/arrow-right.svg';
+import ArrowLeft from '../assets/arrow-left.svg';
 
 const { photos, item } = Astro.props;
 ---
 <div class="splide carousel" role="group" aria-label={`${item.name} photos.`}>
   <div class="loader"><span class="loader-wrapper">🎃 🎃 🎃</span></div>
+  <div class="splide__arrows">
+    <button class="splide__arrow splide__arrow--prev">
+      <span class="sr-only">Prev</span>
+      <ArrowLeft />
+    </button>
+    <button class="splide__arrow splide__arrow--next">
+      <span class="sr-only">Next</span>
+      <ArrowRight />
+    </button>
+  </div>
   <div class="splide__track">
 		<ul class="splide__list">
       {photos.map((photo) => (
@@ -21,7 +33,7 @@ const { photos, item } = Astro.props;
   </div>
 </div>
 
-<style>
+<style is:global>
   .carousel {
     width: 100%;
     overflow: clip;
@@ -44,4 +56,27 @@ const { photos, item } = Astro.props;
     animation: l1 1s steps(4) infinite;
   }
   @keyframes l1 {to{clip-path: inset(0 -34% 0 0)}}
+
+  /* Splide styles */
+  .splide.carousel {
+    .splide__arrow {
+      top: auto;
+      width: 1.5rem;
+      height: 1.5rem;
+      inset-block-end: 0;
+      border-radius: var(--space-3xs);
+      background: var(--color-fg-primary);
+    }
+  
+    .splide__arrow--prev svg {
+      transform: none;
+    }
+  
+    .splide__pagination__page {
+      background: var(--color-fg-primary);
+      &.is-active {
+        opacity: 1;
+      }
+    }
+  }
 </style>
