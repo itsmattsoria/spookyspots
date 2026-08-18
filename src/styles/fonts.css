@@ -1,7 +1,7 @@
 @font-face {
-  font-family: 'PicNic';
-  src: url('/fonts/PicNic.woff2') format('woff2');
-  font-weight: 500;
+  font-family: 'Waffle Cone';
+  src: url('/fonts/TAYWaffleCone-Trial.woff') format('woff2');
+  font-weight: 400;
   font-style: normal;
   font-display: block;
 }

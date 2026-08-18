@@ -3,6 +3,7 @@ import '../styles/fonts.css';
 import '../styles/main.css';
 
 const { pageTitle } = Astro.props;
+const pathname = Astro.url.pathname;
 ---
 
 <!doctype html>
@@ -13,6 +14,14 @@ const { pageTitle } = Astro.props;
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Spoooky.biz - {pageTitle}</title>
+		<meta name="description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 200 businesses, and counting!" />
+		<meta name="og:title" content=`Spoooky.biz - ${pageTitle}` />
+		<meta name="og:description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world." />
+		<meta name="og:url" content="https://spoooky.biz" />
+		<meta name="og:type" content="website" />
+		<meta name="og:site_name" content="Spoooky.biz" />
+		<meta name="og:locale" content="en_US" />
+		<meta name="og:locale:alternate" content="en_US" />
 	</head>
 	<body>
 		<header class="site-header site-padding">
@@ -20,12 +29,12 @@ const { pageTitle } = Astro.props;
 
 			<div class="site-header-title">
 				<h1 class="font-display type-step-3 site-title distortion-filter"><a href="/">Spoooky.biz</a></h1>
-				<div class="type-step-0">A directory of halloween, horror, otherwise spooky businesses.</div>
+				<div class="tagline type-step-0">a directory of the spookiest businesses in the world</div>
 			</div>
 			<nav aria-label="Primary">
 				<ul class="site-nav">
 					<li>
-						<a href="/about" class="button" style="--button-rotation: -4deg;"><span>About</span></a>
+						<a href="/faq" class="button" style="--button-rotation: -4deg;" aria-current={pathname.replace('/', '') === 'faq' ? 'page' : null }><span>FAQ</span></a>
 					</li>
 					<li>
 						<a href="https://forms.gle/doTGS7f46pdkyYHx5" class="button" style="--button-rotation: 3deg;"><span>Submit a spot!</span></a>
@@ -101,7 +110,7 @@ const { pageTitle } = Astro.props;
 		display: flex;
 		flex-wrap: wrap;
 		align-items: baseline;
-		gap: var(--space-2xs);
+		column-gap: var(--space-xs);
 
 		a {
 			text-decoration: none;
@@ -120,10 +129,18 @@ const { pageTitle } = Astro.props;
 		margin: 0 0 var(--space-xs);
 	}
 
+	.tagline {
+		text-wrap: balance;
+	}
+
 	.site-nav {
 		display: flex;
 		align-items: center;
 		gap: var(--space-s);
+
+		a[aria-current="page"] {
+			text-decoration: underline;
+		}
 	}
 
 	/* Footer */

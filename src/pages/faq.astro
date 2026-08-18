@@ -1,16 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import CaratIcon from '../assets/carat.svg';
+import CloudImage from '../components/CloudImage.astro';
+const aboutImageUrl = 'https://res.cloudinary.com/dblidlnrc/image/upload/v1787033601/spoookybiz/brewed-photo-booth_ypfmdl.png';
 ---
 
 <Layout pageTitle="Directory of Spooky & Horror-themed Businesses & Locations">
-	<section id="about" class="site-padding">
-		<h1>About</h1>
-		<p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ratione deserunt quis, animi inventore nemo autem eos eius ea! Voluptate deserunt distinctio pariatur dignissimos veritatis aliquid tempore sed. Officiis, asperiores debitis?</p>
-	</section>
-
   <section id="faq" class="faq-section site-padding">
-    <h2 class="type-step-3 font-display distortion-filter">Frequently Asked Questions</h2>
+    <h1 class="type-step-3 font-display distortion-filter section-title">Frequently Asked Questions</h1>
 
     <ul class="faq-list" role="list">
       <li>
@@ -144,6 +141,7 @@ import CaratIcon from '../assets/carat.svg';
             </div>
           </summary>
           <div>
+            <CloudImage url={aboutImageUrl} alt="Matt and his daughter in the photo booth at The Brewed in Chicago." width={1200} height={429} aspectRatio="1200 / 429" lqip={true} />
             <p>Me—Hi! I'm <a href="https://www.mattsoria.com/" target="_blank">Matt Soria</a>. I'm a photographer and web developer, but I'm also a huge fan of all things Horror, Halloween, and spoooky! I built this site because every time I travel, I'm always looking for new, spoooky spots to check out, and I felt like existing directories were, no offense, a bit lacking. So I built my own!</p>
           </div>
         </details>
@@ -153,15 +151,17 @@ import CaratIcon from '../assets/carat.svg';
 </Layout>
 
 <style>
-	.faq-section {
+	section {
 		max-width: 60ch;
 		margin-inline: auto;
 		margin-block-start: var(--space-3xl);
 	}
 
-	.faq-list {
-		margin-block-start: var(--space-l);
+  .section-title {
+    margin-block-end: var(--space-l);
+  }
 
+	.faq-list {
 		> li {
 			border-block-start: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
 
@@ -198,6 +198,10 @@ import CaratIcon from '../assets/carat.svg';
 
 			+ div {
 				padding-block: var(--space-xs) var(--space-l);
+
+        .img-container + * {
+          margin-block-start: var(--space-s);
+        }
 			}
 		}
 	}

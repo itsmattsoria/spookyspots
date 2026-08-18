@@ -118,8 +118,8 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         </div>
   
         <div class="input-wrap">
-          <label for="sort-by">Filter by tags</label>
-          <select multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
+          <label for="tags-filter">Filter by tags</label>
+          <select id="tags-filter" multiple="multiple" class="multiple-select" placeholder="Select tags" data-facet="tags">
             {uniqueTags.map((tag) => tag.name !== '' && <option value={tag.name}>{tag.name} ({tag.count})</option>)}
           </select>
         </div>
@@ -505,6 +505,11 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
     item.addEventListener('click', (e) => {
       const target = e.target as HTMLElement;
+
+      if (target.closest('details:not([open]) summary')) {
+        const parentDetails = target.closest('details');
+        parentDetails?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
 
       if (target.closest('.directory-list-item-map-link')) {
         const feature = directoryData.find((feature) => feature.properties.id === layerId);

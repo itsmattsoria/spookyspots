@@ -53,6 +53,7 @@
 
     &::placeholder {
       opacity: 0.5;
+      overflow: visible;
       color: var(--color-bg-primary);
     }
   }
