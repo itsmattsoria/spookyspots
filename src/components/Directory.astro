@@ -179,8 +179,8 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                     <a href={item.mapUrl} target="_blank" class="font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
                   </div>
                   <div class="font-mono type-step--2">
-                    {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && item.instagram && <span> | </span>}
-                    {item.website && !item.instagram && item.phone && <span> | </span>}{item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.website && item.instagram && item.phone && <span> | </span>}{item.phone && <a href={'tel:' + item.phone}>{item.phone}</a>}
+                    {item.website && <a href={item.website} target="_blank" aria-label="Visit {item.name}'s website">Website</a>}{item.website && (item.instagram || item.phone) && <span> | </span>}
+                    {item.instagram && <a href={item.instagram} target="_blank" aria-label="Visit {item.name}'s Instagram">Instagram</a>}{item.instagram && item.phone && <span> | </span>}{item.phone && <a href={'tel:' + item.phone}>{item.phone}</a>}
                   </div>
                   <div>
                     <button class="add-to-favorites tag tag--lg">
@@ -937,6 +937,8 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
       details {
         &[open] {
+          background-color: color-mix(in srgb, var(--color-fg-primary) 10%, transparent);
+          
           .summary-icon svg {
             transform: rotate(180deg);
           }
