@@ -24,7 +24,7 @@
 
   &.tag--secondary {
     color: var(--color-fg-primary);
-    background-color: var(--color-fg-secondary);
+    background-color: var(--color-fg-tertiary);
   }
 
   &.tag--lg {

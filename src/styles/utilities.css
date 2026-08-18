@@ -11,8 +11,8 @@
 .color-fg-primary {
   color: var(--color-fg-primary);
 }
-.color-fg-secondary {
-  color: var(--color-fg-secondary);
+.color-fg-tertiary {
+  color: var(--color-fg-tertiary);
 }
 .color-bg-primary {
   color: var(--color-bg-primary);
@@ -43,7 +43,7 @@
 }
 
 .site-padding {
-  padding-inline: var(--space-xs-m);
+  padding-inline: var(--space-xs);
 }
 
 .bullet-list {

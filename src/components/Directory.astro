@@ -157,13 +157,6 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                    <div class="type-step--1">
                     <span style={`color: ${typeColors.find((color) => color.name === item.type)?.color || '#F78148'}`}>{item.type}</span> {item.address && <button class="directory-list-item-map-link link-button font-mono">{item.addressShort} <span><PinIcon /></span></button>}
                    </div>
-                   {item.rating && (
-                     <div>
-                       <p class="type-step--1"><span class="color-warning icon"><StarIcon /></span> <span>{item.rating.toFixed(1)}</span>
-                         {item.userRatingCount && <span> ({item.userRatingCount.toLocaleString('en-US')} reviews)</span>}
-                       </p>
-                     </div>
-                   )}
                   </div>
                   <div>
                     <div class="tag tag--square summary-icon">
@@ -172,6 +165,13 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                   </div>
                 </summary>
                 <div class="directory-list-item-content">
+                  {item.rating && (
+                    <div>
+                      <p class="type-step--1"><span class="color-warning icon"><StarIcon /></span> <span>{item.rating.toFixed(1)}</span>
+                        {item.userRatingCount && <span> ({item.userRatingCount.toLocaleString('en-US')} reviews)</span>}
+                      </p>
+                    </div>
+                  )}
                   {item.description && <div>{item.description}</div>}
                   {item.photos && <div class="photos"><Carousel photos={item.photos} item={item} /></div>}
                   {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag tag--secondary">#{tag}</span>)}</div>}
@@ -778,51 +778,66 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     }
 
     &.map-full {
-      height: auto;
-
-      .map-container,
-      .directory-list-wrapper {
-        grid-column: 1 / -1;
-      }
-
-      .directory-inner {
+      @media screen and (min-width: 768px) {
         height: auto;
-        position: relative;
+  
+        .map-container,
+        .directory-list-wrapper {
+          grid-column: 1 / -1;
+        }
+  
+        .directory-inner {
+          height: auto;
+          position: relative;
+        }
+  
+        .directory-bottom {
+          height: auto;
+        }
+  
+        .directory-list-wrapper {
+          max-height: 700px;
+          margin-inline: var(--space-xs);
+          margin-block-start: var(--space-xs);
+        }
+        
+        .map-wrapper {
+          order: 1;
+        }
+  
+        .directory-list-wrapper {
+          order: 2;
+        }
+  
+        .directory-list {
+          display: grid;
+          position: relative;
+          grid-template-columns: repeat(3, 1fr);
+
+          &::before {
+            inset: 0;
+            content: '';
+            height: 100%;
+            position: absolute;
+            pointer-events: none;
+            background: repeating-linear-gradient(to right, var(--color-fg-secondary), var(--color-fg-secondary) 1px, transparent 1px, transparent 33.3333%);
+          }
+        }
+  
+        .map-container {
+          width: 100%;
+          aspect-ratio: 16 / 9;
+        }
+  
+        #map {
+          border-radius: 0;
+        }
+  
+        #map .maplibregl-ctrl-expand .maplibregl-ctrl-icon {
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M9.00008 4.00008H11.0001V11.0001H4.00008V9.00008H7.58586L3.29297 4.70718L4.70718 3.29297L9.00008 7.58586V4.00008ZM20 15H16.4142L20.7071 19.2929L19.2929 20.7071L15 16.4142V20H13V13H20V15Z'%3E%3C/path%3E%3C/svg%3E");
+        }
       }
 
-      .directory-bottom {
-        height: auto;
-      }
-
-      .directory-list-wrapper {
-        max-height: 40vh;
-      }
-      
-      .map-wrapper {
-        order: 1;
-      }
-
-      .directory-list-wrapper {
-        order: 2;
-      }
-
-      .directory-list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-      }
-
-      .map-container {
-        width: 100%;
-        aspect-ratio: 16 / 9;
-      }
-
-      #map {
-        border-radius: 0;
-      }
-
-      #map .maplibregl-ctrl-expand .maplibregl-ctrl-icon {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M9.00008 4.00008H11.0001V11.0001H4.00008V9.00008H7.58586L3.29297 4.70718L4.70718 3.29297L9.00008 7.58586V4.00008ZM20 15H16.4142L20.7071 19.2929L19.2929 20.7071L15 16.4142V20H13V13H20V15Z'%3E%3C/path%3E%3C/svg%3E");
-      }
     }
   }
 
@@ -860,7 +875,9 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
   /* Directory List */
   .directory-list-wrapper {
-    padding: var(--space-l) var(--space-xs-m) 0;
+    border-radius: var(--space-3xs);
+    border: 1px solid var(--color-fg-primary);
+    margin: var(--space-l) var(--space-xs-m) 0;
     scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 
     &::-webkit-scrollbar {
@@ -877,25 +894,24 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     }
 
     @media screen and (min-width: 768px) {
-      overflow-y: auto;
-      /* position: sticky; */
-      grid-column: 1 / 5;
       height: 100%;
-      padding: 0 0 0 var(--space-m);
-      /* height: calc(100vh - (var(--space-l) * 3)); */
-      /* top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs)); */
+      overflow-y: auto;
+      grid-column: 1 / 5;
+      scrollbar-gutter: stable;
+      margin: 0 0 0 var(--space-xs);
     }
   }
   .directory-list {
     margin: 0;
     padding: 0;
     list-style: none;
+    margin-block-start: -1px;
 
     .directory-list-item {
-      border-top: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
+      border-top: 1px solid var(--color-fg-secondary);
 
       &:last-child {
-        border-bottom: 1px solid color-mix(in srgb, var(--color-fg-primary) 50%, transparent);
+        border-bottom: 1px solid var(--color-fg-secondary);
       }
 
       /* Favorites functionality */
@@ -933,7 +949,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         align-items: start;
         gap: var(--space-2xs);
         justify-content: space-between;
-        padding: var(--space-xs) var(--space-3xs);
+        padding: var(--space-xs) var(--space-xs);
 
         &:hover,
         &:focus-visible {
@@ -960,12 +976,12 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
         flex-direction: column;
         font-size: var(--step--1);
         margin-top: var(--space-2xs);
+        padding-inline: var(--space-xs);
         padding-block-end: var(--space-m);
       }
 
       .photos {
         display: flex;
-        
       }
     }
   }
@@ -981,11 +997,8 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
     @media screen and (min-width: 768px) {
       order: 2;
-      /* position: sticky; */
-      grid-column: 5 / -1;
       height: 100%;
-      /* height: calc(100vh - (var(--space-l) * 3)); */
-      /* top: calc((var(--space-s) * 2) + var(--step--1) + var(--space-3xs) + var(--space-l) + var(--space-3xs)); */
+      grid-column: 5 / -1;
     }
   }
 
@@ -1047,14 +1060,20 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       align-items: center;
       justify-content: center;
       outline-offset: 0.35rem;
-    }
 
-    .maplibregl-ctrl-expand {
-      .maplibregl-ctrl-icon {
-        background-size: 70% 70%;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M6.41421 5H10V3H3V10H5V6.41421L9.29289 10.7071L10.7071 9.29289L6.41421 5ZM21 14H19V17.5858L14.7071 13.2929L13.2929 14.7071L17.5858 19H14V21H21V14Z'%3E%3C/path%3E%3C/svg%3E");
+      &.maplibregl-ctrl-expand {
+        display: none;
+        @media screen and (min-width: 768px) {
+          display: flex;
+        }
+  
+        .maplibregl-ctrl-icon {
+          background-size: 70% 70%;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M6.41421 5H10V3H3V10H5V6.41421L9.29289 10.7071L10.7071 9.29289L6.41421 5ZM21 14H19V17.5858L14.7071 13.2929L13.2929 14.7071L17.5858 19H14V21H21V14Z'%3E%3C/path%3E%3C/svg%3E");
+        }
       }
     }
+
 
     @media screen and (min-width: 768px) {
       border-radius: var(--space-3xs) 0 0 var(--space-3xs);

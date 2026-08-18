@@ -3,6 +3,11 @@
   --color-fg-primary: #f5efe0;
   --color-fg-secondary: color-mix(
     in srgb,
+    var(--color-fg-primary) 50%,
+    transparent
+  );
+  --color-fg-tertiary: color-mix(
+    in srgb,
     var(--color-fg-primary) 20%,
     transparent
   );

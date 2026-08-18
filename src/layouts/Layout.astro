@@ -20,13 +20,13 @@ const { pageTitle } = Astro.props;
 			<a href="#main-content" class="skip-link">Skip to main content</a>
 
 			<div class="site-header-title">
-				<h1 class="font-display type-step-3 site-title distortion-filter">Spoooky.biz</h1>
+				<h1 class="font-display type-step-3 site-title distortion-filter"><a href="/">Spoooky.biz</a></h1>
 				<div class="type-step-0">A directory of halloween, horror, otherwise spooky businesses.</div>
 			</div>
 			<nav aria-label="Primary">
 				<ul class="site-nav">
 					<li>
-						<a href="#faq" class="button" style="--button-rotation: -4deg;"><span>FAQs</span></a>
+						<a href="/about" class="button" style="--button-rotation: -4deg;"><span>About</span></a>
 					</li>
 					<li>
 						<a href="https://forms.gle/doTGS7f46pdkyYHx5" class="button" style="--button-rotation: 3deg;"><span>Submit a spot!</span></a>
@@ -40,7 +40,7 @@ const { pageTitle } = Astro.props;
 		</main>
 
 		<footer class="site-footer site-padding">
-			<p>© {new Date().getFullYear()} Spooky Spots. A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
+			<p class="type-step--2">© {new Date().getFullYear()} Spoooky.biz 🎃 A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
 		</footer>
 
 		<!-- credit: https://kirgroup.net/blog/2025/07/21-SVG-Hand-Drawing-without-js.html -->
@@ -101,6 +101,15 @@ const { pageTitle } = Astro.props;
 		flex-wrap: wrap;
 		align-items: baseline;
 		gap: var(--space-2xs);
+
+		a {
+			text-decoration: none;
+			&:hover {
+				font-style: normal;
+				text-decoration: underline;
+				text-decoration-thickness: 0.05em;
+			}
+		}
 	}
 
 	.site-title {
@@ -118,6 +127,7 @@ const { pageTitle } = Astro.props;
 
 	/* Footer */
 	.site-footer {
+		text-align: center;
 		margin-block-start: var(--space-3xl);
 	}
 </style>
