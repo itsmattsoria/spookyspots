@@ -5,6 +5,7 @@
 @import './skip-links.css';
 @import './ui.css';
 @import './filters.css';
+@import './pages.css';
 
 @layer base {
   @view-transition {
@@ -66,6 +67,10 @@
     outline-offset: 0.35rem;
   }
 
+  p {
+    line-height: 1.35;
+  }
+
   a {
     color: currentColor;
     text-underline-offset: 0.15em;
@@ -87,7 +92,7 @@
   }
 
   svg {
-    transition: fill 0.2s ease-out;
+    transition: fill 0.1s ease-out;
   }
 
   .icon {

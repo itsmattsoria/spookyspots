@@ -1,6 +1,8 @@
 ---
 import '../styles/fonts.css';
 import '../styles/main.css';
+import InstagramIcon from '../assets/instagram.svg';
+import KoFiIcon from '../assets/kofi_symbol.svg';
 
 const { pageTitle } = Astro.props;
 const pathname = Astro.url.pathname;
@@ -14,9 +16,9 @@ const pathname = Astro.url.pathname;
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Spoooky.biz - {pageTitle}</title>
-		<meta name="description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 200 year-round spooky businesses from 37 U.S. states and 35 countries." />
+		<meta name="description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 250 year-round spooky businesses from 39 U.S. states and 35 countries." />
 		<meta name="og:title" content=`Spoooky.biz - ${pageTitle}` />
-		<meta name="og:description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 200 year-round spooky businesses from 37 U.S. states and 35 countries." />
+		<meta name="og:description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 250 year-round spooky businesses from 39 U.S. states and 35 countries." />
 		<meta name="og:url" content="https://spoooky.biz" />
 		<meta name="og:type" content="website" />
 		<meta name="og:site_name" content="Spoooky.biz" />
@@ -29,15 +31,18 @@ const pathname = Astro.url.pathname;
 
 			<div class="site-header-title">
 				<h1 class="font-display type-step-3 site-title distortion-filter"><a href="/">Spoooky.biz</a></h1>
-				<div class="tagline type-step--1">a directory of halloween, horror, and otherwise spooky-themed businesses from around the world</div>
+				<div class="tagline type-step--1">a directory of halloween, horror, and otherwise spooky-themed businesses</div>
 			</div>
 			<nav aria-label="Primary">
 				<ul class="site-nav">
 					<li>
-						<a href="/faq" class="button" style="--button-rotation: -4deg;" aria-current={pathname.replace('/', '') === 'faq' ? 'page' : null }><span>FAQ</span></a>
+						<a href="/about" class="button" style="--button-rotation: -4deg;" aria-current={pathname.replace('/', '') === 'about' ? 'page' : null }><span>About</span></a>
 					</li>
 					<li>
-						<a href="https://forms.gle/doTGS7f46pdkyYHx5" class="button" style="--button-rotation: 3deg;"><span>Submit a spot!</span></a>
+						<a href="/spooklight" class="button" style="--button-rotation: 1deg;" aria-current={pathname.replace('/', '') === 'spooklight' ? 'page' : null }><span>Spooklight</span></a>
+					</li>
+					<li>
+						<a href="https://forms.gle/doTGS7f46pdkyYHx5" class="button" style="--button-rotation: 3deg;"><span>Submit a biz!</span></a>
 					</li>
 				</ul>
 			</nav>
@@ -49,11 +54,12 @@ const pathname = Astro.url.pathname;
 
 		<footer class="site-footer site-padding">
 			<p class="type-step-1 font-display distortion-filter">👻 Support your local spooky business 👻</p>
+			<div class="social-links flex flex-wrap justify-center gap-xs">
+				<a href="https://ko-fi.com/itsmattsoria" target="_blank" class="button button--sm" style="--button-rotation: -1deg;"><KoFiIcon /><span>Support us on Ko-fi</span></a>
+				<a href="https://www.instagram.com/spoooky.biz/" target="_blank" class="button button--sm" style="--button-rotation: 4deg;" aria-label="Follow us on Instagram"><InstagramIcon /></a>
+			</div>
 			<p class="type-step--2">Qustions, feedback, or bug reports: <a href="mailto:hellospoookybiz@gmail.com">hellospoookybiz@gmail.com</a></p>
 			<p class="type-step--2">© {new Date().getFullYear()} Spoooky.biz 🎃 A fun little project by <a href="https://www.mattsoria.com">Matt Soria</a>.</p>
-			<div>
-				<script type="text/javascript" src="https://storage.ko-fi.com/cdn/widget/Widget_2.js"></script><script type="text/javascript">kofiwidget2.init('Support us on Ko-fi', '#f66308', 'K3K31U6S61');kofiwidget2.draw();</script>
-			</div>
 		</footer>
 
 		<!-- credit: https://kirgroup.net/blog/2025/07/21-SVG-Hand-Drawing-without-js.html -->
@@ -111,7 +117,7 @@ const pathname = Astro.url.pathname;
 
 	.site-header-title {
 		h1 {
-			margin-block-end: 0;
+			margin-block-end: var(--space-3xs);
 		}
 
 		a {
@@ -137,6 +143,7 @@ const pathname = Astro.url.pathname;
 
 	.site-nav {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: var(--space-s);
 
@@ -154,6 +161,10 @@ const pathname = Astro.url.pathname;
 		justify-content: center;
 		padding-block-end: var(--space-l);
 		margin-block-start: var(--space-3xl);
+
+		.social-links {
+			margin-block: var(--space-s);
+		}
 	}
 </style>
 

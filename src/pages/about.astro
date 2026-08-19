@@ -1,0 +1,198 @@
+---
+import Layout from '../layouts/Layout.astro';
+import CaratIcon from '../assets/carat.svg';
+import CloudImage from '../components/CloudImage.astro';
+const aboutImageUrl = 'https://res.cloudinary.com/dblidlnrc/image/upload/v1787033601/spoookybiz/brewed-photo-booth_ypfmdl.png';
+---
+
+<Layout pageTitle="About, FAQ, and Disclaimers">
+  <div class="page-content">
+    <section id="about" class="site-padding">
+      <h1 class="type-step-3 font-display distortion-filter section-title">About</h1>
+      <p>If you're on this website then we probably have this in common: we're really into horror, Halloween, and all things spooky—and not just during the month of October!</p>
+      <p>I built this site because every time I travel I'm always on the lookout for fun, spooky spots to check out, and I couldn't find a great resource to find them.</p>
+      <p>Our goal is to make it super easy for you to discover and support small, spooky businesses and institutions, wherever you are in the world.</p>
+      <p>We also want to learn about and highlight the stories of the amazing people behind the mask of some of these fantastic places, so we'll be sharing interviews with the creators and operators over on the <a href="/spooklight">Spooklight</a> page. Weirdos supporting weirdos!</p>
+      <p>This is a passion project, and a team of one, so if you have any feedback, suggestions, or just want to say <em>boo!</em>, <a href="mailto:hellospoookybiz@gmail.com" target="_blank">send me an email</a>!</p>
+    </section>
+
+    <section id="faq" class="faq-section site-padding">
+      <h2 class="type-step-2 font-display distortion-filter section-title">Frequently Asked Questions</h2>
+
+      <ul class="details-list" role="list">
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                Why "Spoooky" with three "O"s?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>Because spooky.biz was super expensive, and three "O"s is fun! But if you wanna buy it and donate it to us, <a href="mailto:hellospoookybiz@gmail.com" target="_blank">let us know</a>!</p>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                Why only businesses, and not haunted places, etc?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>There are already plenty of directories for haunted places (like, reportedtly haunted buildings, etc), as well as for haunted attractions. If that's what you're looking for, check out the following:</p>
+              <ul class="bullet-list">
+                <li><a href="https://www.thescarefactor.com/" target="_blank">The Scare Factor</a></li>
+                <li><a href="https://www.haunts.com/haunted-places/" target="_blank">Haunts.com</a></li>
+                <li><a href="https://hauntedus.com/" target="_blank">HauntedUS.com</a></li>
+                <li><a href="https://www.hauntworld.com/" target="_blank">HauntedWorld.com</a></li>
+                <li><a href="https://frightmaps.com/" target="_blank">Frightmaps</a></li>
+                <li><a href="https://dotsonmaps.com/dots/eerie/paranormal" target="_blank">Haunted Places Around the World: Dots on Maps</a></li>
+              </ul>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                Was this thing built with AI?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>No. I'm a professional web developer, and while I do use some AI-assisted coding tools, I built this site myself (with <a href="https://astro.build/" target="_blank">Astro</a> and Google Sheets, if you're curious), and I personally hand-entered and manually verified all of the data for each business in the directory.</p>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                What qualifies as "spooky"?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>Yeah, sometimes it's not obvious. I just try to make a judgement on whether a significant portion of the business is themed or selling things that are clearly in the realm of spooky. So maybe it's a collectibles shop that doesn't exclusively sell horror collectibles, but it's still got enough to make a horror fan want to check out—I'll count that, for example.</p>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                Why isn't my business, or business I'm a fan of listed?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>We may just not know about it yet—please go fill out <a href="https://forms.gle/ddq9AjSiJLYuQQ4B8" target="_blank">the submission form</a>, and if it's a good fit, we'll add it!</p>
+              <p>If you've done that and it's still not listed, here's a few reasons it may not have been included:</p>
+              <ul class="bullet-list">
+                <li>It didn't meet the criteria outlined in the submission form</li>
+                <li>It just didn't feel quite spooky enough</li>
+                <li>It didn't meet our ethical standards. The niche of 'oddities' definitely has some overlap with what we list, but if the business showcases items that we consider to be exploitative, or in bad taste, we're not gonna list it. (example: real human remains, etc)</li>
+                <li>The business owner is known to be a bigot, fascist, or some other kind of shitty person.</li>
+              </ul>
+              <p>If you think we've made a mistake, please <a href="mailto:hellospoookybiz@gmail.com" target="_blank">let us know</a>.</p>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                Can I pay to have my business listed first?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>Nah. At least not at this moment. Part of the reason I started this project was because some alternatives were inundated with ads and paid listings. I'm not saying I'll never do it, but I'd need to find a way to do it that doesn't feel annoying. <a href="mailto:hellospoookybiz@gmail.com" target="_blank">Let me know</a> if you have any ideas!</p>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">
+                Who's behind this?
+              </div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <CloudImage url={aboutImageUrl} alt="Matt and his daughter in the photo booth at The Brewed in Chicago." width={1200} height={429} aspectRatio="1200 / 429" lqip={true} />
+              <p>Me—Hi! I'm <a href="https://www.mattsoria.com/" target="_blank">Matt Soria</a>. I'm a photographer and web developer, and a huge fan of all things Horror, Halloween, and spooky! I have too many favorite horror movies to list here, but I have a whole website dedicated to my horror movie-watching habits at <a href="https://halloween.mattsoria.com" target="_blank">halloween.mattsoria.com</a> if you're interested.</p>
+            </div>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <div class="summary-text">How can I support Spoooky.biz?</div>
+              <div>
+                <div class="tag tag--square summary-icon">
+                  <CaratIcon />
+                </div>
+              </div>
+            </summary>
+            <div>
+              <p>Aww, thanks—that's so sweet of you!</p>
+              <p>We hope to have some merch in the future, but for now you can support us in the following ways:</p>
+              <ul class="bullet-list">
+                <li>Sharing the site with all of your spooky friends and family</li>
+                <li>Follow us on <a href="https://www.instagram.com/spoooky.biz/" target="_blank">Instagram</a></li>
+                <li>Submitting a business to the directory if you know of one that's not listed</li>
+                <li>Opening up your dream spooky business! More spooky businesses is good for our business!</li>
+                <li>Leave us a tip on our Ko-fi: <a href="https://ko-fi.com/itsmattsoria" target="_blank">ko-fi.com/itsmattsoria</a></li>
+              </ul>
+            </div>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <section id="disclaimers" class="site-padding">
+      <h2 class="type-step-2 font-display distortion-filter section-title">Disclaimers</h2>
+      <h3 class="type-step-1">Endorsement of Listed Businesses</h3>
+      <p>We love supporting small spooky businesses, but we're not affiliated with any listed businesses, and just because a business is listed here doesn't mean we endorse what they do, sell, or say. Based on the basic information available about a business we make a judgement on whether it meets our criteria for inclusion (see <em>Why isn't my business, or business I'm a fan of listed?</em> above), but we can't dive deep enough into each business to know their full story, and the kind of people running the business. That said, we don't want to support a business that is known to be hateful or bigoted in any way, so if you want to flag a business for those reasons, please <a href="mailto:hellospoookybiz@gmail.com" target="_blank">let us know</a>.</p>
+      <h3 class="type-step-1">Tracking & Visitor Data Privacy</h3>
+      <p>We use a cookie-free, privacy-focused analytics tool called <a href="https://usefathom.com/data" target="_blank">Fathom</a> to help us understand basic site traffic and usage patterns. It doesn't save any personally identifiable information, and doesn't track you across sites. We value your privacy, and we don't want creepy trackers following you around the web.</p>
+    </section>
+
+    <section id="contact" class="site-padding">
+      <h2 class="type-step-2 font-display distortion-filter section-title">Contact</h2>
+      <p>To get in touch for any reason, please send an email to <a href="mailto:hellospoookybiz@gmail.com" target="_blank">hellospoookybiz@gmail.com</a>. We'll try to get back to you as soon as we can.</p>
+    </section>
+  </div>
+</Layout>

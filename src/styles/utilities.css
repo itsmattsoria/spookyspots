@@ -59,3 +59,29 @@
     margin-block-start: var(--space-s);
   }
 }
+
+/* Flex utilities */
+.flex {
+  display: flex;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.items-center {
+  align-items: center;
+}
+.justify-center {
+  justify-content: center;
+}
+.gap-xs {
+  gap: var(--space-xs);
+}
+.gap-s {
+  gap: var(--space-s);
+}
+.gap-m {
+  gap: var(--space-m);
+}
+.gap-l {
+  gap: var(--space-l);
+}
