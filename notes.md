@@ -29,4 +29,11 @@
   - A separate directory of online businesses
 - Zine
   - Semi-annual? Small printed zine showcasing featured businesses and such.
+
+## Merch Ideas
+
 - "Spot us on Spoooky.biz" window stickers to send to businesses
+- "Keep Halloween Weird"
+- "Ghouls be shoppin"
+- "Spook local"
+- "Support your local spooky business!"

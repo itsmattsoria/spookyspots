@@ -14,7 +14,7 @@ const pathname = Astro.url.pathname;
 		<link rel="icon" type="image/png" href="/favicon.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Spoooky.biz - {pageTitle}</title>
-		<meta name="description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 200 businesses, and counting!" />
+		<meta name="description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world. With over 200 year-round spooky businesses, and counting!" />
 		<meta name="og:title" content=`Spoooky.biz - ${pageTitle}` />
 		<meta name="og:description" content="The most comprehensive directory of halloween, horror, and otherwise spooky-themed businesses from around the world." />
 		<meta name="og:url" content="https://spoooky.biz" />
@@ -29,7 +29,7 @@ const pathname = Astro.url.pathname;
 
 			<div class="site-header-title">
 				<h1 class="font-display type-step-3 site-title distortion-filter"><a href="/">Spoooky.biz</a></h1>
-				<div class="tagline type-step-0">a directory of the spookiest businesses in the world</div>
+				<div class="tagline type-step--1">a directory of halloween, horror, and otherwise spooky-themed businesses from around the world</div>
 			</div>
 			<nav aria-label="Primary">
 				<ul class="site-nav">
@@ -110,10 +110,9 @@ const pathname = Astro.url.pathname;
 	}
 
 	.site-header-title {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: baseline;
-		column-gap: var(--space-xs);
+		h1 {
+			margin-block-end: 0;
+		}
 
 		a {
 			text-decoration: none;
