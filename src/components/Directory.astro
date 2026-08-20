@@ -131,7 +131,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
           </button>
         </div>
       </div>
-      <div class="font-display type-step-0 distortion-filter"><span id="listing-count">{listingCount}</span> spooky spots</div>
+      <div class="font-mono type-step--2"><span id="listing-count">{listingCount}</span> <span id="listing-count-text">spooky spots</span></div>
     </div>
   
     <div class="directory-bottom">
@@ -455,6 +455,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
 
   // List.js functionality for search, sort, and filter
   const listingCount = document.getElementById('listing-count');
+  const listingCountText = document.getElementById('listing-count-text');
   const emptyState = document.getElementById('empty-state');
   const directoryListItems = document.querySelectorAll('.directory-list-item');
   const directoryList = new List('directory-container', {
@@ -478,6 +479,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   directoryList.on('updated', () => {
     const listingLength = directoryList.matchingItems.length;
     listingCount.textContent = listingLength.toString();
+    listingCountText.textContent = listingLength === 1 ? 'spooky spot' : 'spooky spots';
     if (listingLength === 0) {
       emptyState.style.display = 'block';
     } else {
