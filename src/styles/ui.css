@@ -105,6 +105,7 @@ summary:has(.tag) {
   text-decoration: none;
   font-size: var(--step--1);
   color: var(--color-bg-primary);
+  transition: color 0.2s ease-out;
   font-family: var(--font-display);
   transform: rotate(var(--button-rotation));
   padding: var(--space-2xs) var(--space-2xs) var(--space-3xs);
@@ -134,10 +135,6 @@ summary:has(.tag) {
     transform: rotate(0deg);
     text-decoration: underline;
     color: var(--color-bg-primary);
-
-    svg {
-      fill: var(--color-fg-primary);
-    }
   }
 
   &:active {
@@ -149,6 +146,11 @@ summary:has(.tag) {
   &.button--sm {
     padding: var(--space-2xs);
     font-family: var(--font-sans);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--color-fg-primary);
+    }
   }
 }
 

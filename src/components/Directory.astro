@@ -181,7 +181,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
                     </div>
                   )}
                   {item.description && <div>{item.description}</div>}
-                  {item.photos && <div class="photos"><Carousel photos={item.photos} item={item} /></div>}
+                  {item.photos?.length > 0 && <div class="photos"><Carousel photos={item.photos} item={item} /></div>}
                   {item.tags && <div class="tags">{item.tags.split(', ').map((tag) => <span class="tag tag--secondary">#{tag}</span>)}</div>}
                   <div>
                     <a href={item.mapUrl} target="_blank" class="font-mono type-step--2">{item.address}<span class="external-icon">↗</span></a>
