@@ -141,8 +141,8 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
             <div class="zoom-msg-content">
               <p>Use ctrl + scroll, or "pinch" to zoom the map</p>
               <div>
-                <label for="supress-zoom-msg" class="font-mono type-step--1">Don't show this message again
-                  <input type="checkbox" id="supress-zoom-msg">
+                <label for="suppress-zoom-msg" class="font-mono type-step--1">Don't show this message again
+                  <input type="checkbox" id="suppress-zoom-msg">
                 </label>
               </div>
             </div>
@@ -257,16 +257,16 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   // Disable mouse wheel scrolling soom, but keep pinch-to-zoom enabled
   const zoomMsg = document.getElementById('zoom-msg');
   const zoomMsgDismiss = document.getElementById('zoom-msg-dismiss');
-  const supressZoomMsg = document.getElementById('supress-zoom-msg');
+  const suppressZoomMsg = document.getElementById('suppress-zoom-msg');
   let zoomMsgDismissed = false;
-  let zoomMsgSupressed = false;
+  let zoomMsgsuppressed = false;
   let zoomMsgTimeout;
-  checkZoomMsgSupression();
+  checkZoomMsgsuppression();
 
-  function checkZoomMsgSupression() {
-    if (localStorage.getItem('supress-zoom-msg') !== null) {
+  function checkZoomMsgsuppression() {
+    if (localStorage.getItem('suppress-zoom-msg') !== null) {
       zoomMsg.style.display = 'none';
-      zoomMsgSupressed = true;
+      zoomMsgsuppressed = true;
     }
     handleZoomMsg();
   }
@@ -275,7 +275,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
     map.getCanvasContainer().addEventListener('wheel', (e) => {
       if (!e.ctrlKey) {
         // Display the scroll message when a wheel event is detected
-        if (!zoomMsgDismissed && !zoomMsgSupressed) {
+        if (!zoomMsgDismissed && !zoomMsgsuppressed) {
           zoomMsg.style.display = 'flex';
 
           clearTimeout(zoomMsgTimeout);
@@ -291,8 +291,8 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   }
 
   zoomMsgDismiss?.addEventListener('click', () => {
-    if (supressZoomMsg?.checked) {
-      localStorage.setItem('supress-zoom-msg', 'true');
+    if (suppressZoomMsg?.checked) {
+      localStorage.setItem('suppress-zoom-msg', 'true');
     }
     zoomMsgDismissed = true;
     zoomMsg.style.display = 'none';
