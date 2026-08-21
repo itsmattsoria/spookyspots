@@ -9,9 +9,16 @@
 - Update URL with filters and "share" button
 - ~Add ability to add a spot to a wishlist, but come up with a better name~
 - Add "search in this area" button to the map, like google maps
-- Add "don't remind me" button to the map scroll message, using localStorage
+- ~Add "don't remind me" button to the map scroll message, using localStorage~
 - Add copy that reads "showcasing spooky spots from XX states, and XX countries"
-- About Page
+- ~About Page~
+
+## Subreddits to post to
+
+- r/Halloween
+- r/SideProject
+- r/deadmeatjames
+- r/
 
 ## Long-term
 

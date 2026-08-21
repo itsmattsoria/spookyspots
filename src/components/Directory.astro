@@ -261,9 +261,9 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   let zoomMsgDismissed = false;
   let zoomMsgsuppressed = false;
   let zoomMsgTimeout;
-  checkZoomMsgsuppression();
+  checkZoomMsgSuppression();
 
-  function checkZoomMsgsuppression() {
+  function checkZoomMsgSuppression() {
     if (localStorage.getItem('suppress-zoom-msg') !== null) {
       zoomMsg.style.display = 'none';
       zoomMsgsuppressed = true;
@@ -281,6 +281,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
           clearTimeout(zoomMsgTimeout);
           zoomMsgTimeout = setTimeout(() => {
             zoomMsg.style.display = 'none';
+            checkZoomMsgSuppressionCheckbox();
           }, 3000);
         }
 
@@ -295,8 +296,15 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
       localStorage.setItem('suppress-zoom-msg', 'true');
     }
     zoomMsgDismissed = true;
-    zoomMsg.style.display = 'none';
+    checkZoomMsgSuppressionCheckbox();
   });
+
+  function checkZoomMsgSuppressionCheckbox() {
+    if (suppressZoomMsg?.checked) {
+      localStorage.setItem('suppress-zoom-msg', 'true');
+      zoomMsgsuppressed = true;
+    }
+  }
   
   // when the mouse enters the zoomMsg, pause the timeout
   zoomMsg?.addEventListener('mouseenter', (e) => {
@@ -306,6 +314,7 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   zoomMsg?.addEventListener('mouseleave', (e) => {
     zoomMsgTimeout = setTimeout(() => {
       zoomMsg.style.display = 'none';
+      checkZoomMsgSuppressionCheckbox();
     }, 3000);
   });
 
