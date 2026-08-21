@@ -199,7 +199,7 @@ summary:has(.tag) {
     + div {
       padding-block: var(--space-xs) var(--space-l);
 
-      .img-container + * {
+      > * + * {
         margin-block-start: var(--space-s);
       }
     }
