@@ -12,6 +12,7 @@
 - ~Add "don't remind me" button to the map scroll message, using localStorage~
 - Add copy that reads "showcasing spooky spots from XX states, and XX countries"
 - ~About Page~
+- Reach out to spooky instagram accounts to beta test
 
 ## Subreddits to post to
 

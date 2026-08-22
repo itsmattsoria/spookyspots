@@ -33,15 +33,15 @@
 
   ::selection {
     color: var(--color-bg-primary);
-    background-color: var(--color-fg-primary);
+    background-color: var(--color-accent);
   }
   ::-moz-selection {
     color: var(--color-bg-primary);
-    background-color: var(--color-fg-primary);
+    background-color: var(--color-accent);
   }
   ::target-text {
-    color: var(--color-fg-primary);
-    background-color: var(--color-bg-accent);
+    color: var(--color-bg-primary);
+    background-color: var(--color-accent);
   }
 
   &::-webkit-scrollbar {

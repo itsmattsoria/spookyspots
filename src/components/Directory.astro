@@ -413,7 +413,6 @@ const sortedDirectoryData = directoryData?.sort((a: Listing, b: Listing) => a.na
   popupInfoLinks.forEach((link) => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
-      console.log('popup info link clicked');
       const target = e.target as HTMLButtonElement;
       const feature = target.dataset.popupInfoLinkFeature;
       const featureElement = document.querySelector<HTMLElement>(`[data-id="${feature}"]`);

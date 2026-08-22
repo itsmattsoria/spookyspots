@@ -16,7 +16,7 @@ const typeColors = [
     color: '#F66308',
   },
   {
-    name: 'Record & Bookstores',
+    name: 'Records, Books & Movies',
     color: '#DC2525',
   },
   {
